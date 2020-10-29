@@ -1,19 +1,21 @@
 package deribit.models.currencies;
 
 import commons.models.currencies.BaseCurrency;
+import commons.standards.Cryptocurrency;
 import deribit.models.expiries.DeribitExpiry;
 
 import java.util.HashMap;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class DeribitCurrency extends BaseCurrency {
 
     // This contains the instances present in the system
     private static HashMap<String, DeribitCurrency> currencies;
 
-    private final int feePrecision;
-    private final int minimumConfirmations;
-    private final double minimumWithdrawalFee;
-    private final double withdrawalFee;
+    protected final Integer feePrecision;
+    protected final Integer minimumConfirmations;
+    protected final Double minimumWithdrawalFee;
+    protected final Double withdrawalFee;
 
     protected DeribitCurrency(Builder builder)
     {
@@ -50,10 +52,10 @@ public class DeribitCurrency extends BaseCurrency {
 
     public static class Builder extends BaseCurrency.Builder<Builder>{
 
-        protected int feePrecision;
-        protected int minimumConfirmations;
-        protected double minimumWithdrawalFee;
-        protected double withdrawalFee;
+        protected Integer feePrecision;
+        protected Integer minimumConfirmations;
+        protected Double minimumWithdrawalFee;
+        protected Double withdrawalFee;
 
         @Override
         public String getUniqueIdentifier() {
@@ -70,25 +72,36 @@ public class DeribitCurrency extends BaseCurrency {
             return this;
         }
 
-        public Builder setFeePrecision(int val) {
+        public Builder setFeePrecision(Integer val) {
             this.feePrecision = val;
             return self();
         }
 
-        public Builder setMinimumConfirmations(int val) {
+        public Builder setMinimumConfirmations(Integer val) {
             this.minimumConfirmations = val;
             return self();
         }
 
-        public Builder setMinimumWithdrawalFee(int val) {
+        public Builder setMinimumWithdrawalFee(Double val) {
             this.minimumWithdrawalFee = val;
             return self();
         }
 
-        public Builder setWithdrawalFee(int val) {
+        public Builder setWithdrawalFee(Double val) {
             this.withdrawalFee = val;
             return self();
         }
+    }
+
+    public Cryptocurrency getCryptoCurrency(){
+        if (this.quoteCurrency.equalsIgnoreCase("BTC")){
+            return Cryptocurrency.BTC;
+        }
+        if (this.quoteCurrency.equalsIgnoreCase("ETH")){
+            return Cryptocurrency.ETH;
+        }
+        // Not sure what this is
+        throw new IllegalArgumentException("String symbol could not be parsed");
     }
 
 }

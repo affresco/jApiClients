@@ -1,6 +1,6 @@
 package commons.standards;
 
-public enum SettlementPeriods {
+public enum SettlementPeriod {
     DAILY,
     WEEKLY,
     MONTHLY,

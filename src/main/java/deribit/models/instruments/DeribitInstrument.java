@@ -2,8 +2,7 @@ package deribit.models.instruments;
 
 import commons.models.instruments.BaseInstrument;
 
-import commons.standards.InstrumentKinds;
-import deribit.models.currencies.DeribitCurrency;
+import commons.standards.InstrumentKind;
 import deribit.models.expiries.DeribitExpiry;
 import deribit.models.fees.DeribitFeeStructure;
 import deribit.models.market.DeribitMarketStructure;
@@ -16,7 +15,7 @@ public class DeribitInstrument extends BaseInstrument {
     // This contains the instances present in the system
     private static HashMap<String, DeribitInstrument> instances;
 
-    private final InstrumentKinds kind;
+    private final InstrumentKind kind;
     private final DeribitExpiry expiry;
     private final DeribitFeeStructure feeStructure;
     private final DeribitMarketStructure marketStructure;
@@ -32,7 +31,7 @@ public class DeribitInstrument extends BaseInstrument {
 
     protected static DeribitInstrument getInstance(Builder builder){
 
-        // mAke sure we do have an instance of the HashMap
+        // Make sure we do have an instance of the HashMap
         if (instances == null) {
             synchronized (instances) {
                 instances = new HashMap<>();
@@ -57,7 +56,7 @@ public class DeribitInstrument extends BaseInstrument {
 
     public static class Builder extends BaseInstrument.Builder<Builder>{
 
-        protected InstrumentKinds kind;
+        protected InstrumentKind kind;
         protected DeribitExpiry expiry;
         protected DeribitFeeStructure feeStructure;
         protected DeribitMarketStructure marketStructure;
@@ -77,7 +76,7 @@ public class DeribitInstrument extends BaseInstrument {
             return this;
         }
 
-        public Builder setKind(InstrumentKinds val) {
+        public Builder setKind(InstrumentKind val) {
             this.kind = val;
             return self();
         }

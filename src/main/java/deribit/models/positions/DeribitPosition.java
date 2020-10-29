@@ -1,105 +1,42 @@
 package deribit.models.positions;
 
 import commons.models.positions.BasePosition;
+import commons.standards.InstrumentKind;
+import deribit.models.instruments.DeribitInstrument;
 
 public class DeribitPosition extends BasePosition {
 
+    // ##################################################################
+    // ATTRIBUTES
+    // ##################################################################
+
     // Content
-    private double totalProfitLoss;
-    private double sizeCurrency;
-    private double size;
-    private double settlementPrice;
-    private double realizedProfitLoss;
-    private double realizedFunding;
-    private double openOrdersMargin;
-    private double markPrice;
-    private double maintenanceMargin;
-    private double leverage;
-    private String kind;
-    private String instrument;
-    private double initialMargin;
-    private double indexPrice;
-    private double floatingProfitLoss;
-    private double estimatedLiquidationPrice;
-    private String direction;
-    private double delta;
-    private double averagePrice;
+    private final double totalProfitLoss;
+    private final double sizeCurrency;
+    private final double size;
+    private final double settlementPrice;
+    private final double realizedProfitLoss;
+    private final double realizedFunding;
+    private final double openOrdersMargin;
+    private final double markPrice;
+    private final double maintenanceMargin;
+    private final double leverage;
 
-    public double getTotalProfitLoss() {
-        return totalProfitLoss;
-    }
+    // These are special...
+    private final InstrumentKind kind;
+    private final DeribitInstrument instrument;
+    private final String direction;
 
-    public double getSizeCurrency() {
-        return sizeCurrency;
-    }
+    private final double initialMargin;
+    private final double indexPrice;
+    private final double floatingProfitLoss;
+    private final double estimatedLiquidationPrice;
+    private final double delta;
+    private final double averagePrice;
 
-    public double getSize() {
-        return size;
-    }
-
-    public double getSettlementPrice() {
-        return settlementPrice;
-    }
-
-    public double getRealizedProfitLoss() {
-        return realizedProfitLoss;
-    }
-
-    public double getRealizedFunding() {
-        return realizedFunding;
-    }
-
-    public double getOpenOrdersMargin() {
-        return openOrdersMargin;
-    }
-
-    public double getMarkPrice() {
-        return markPrice;
-    }
-
-    public double getMaintenanceMargin() {
-        return maintenanceMargin;
-    }
-
-    public double getLeverage() {
-        return leverage;
-    }
-
-    public String getKind() {
-        return kind;
-    }
-
-    public String getInstrument() {
-        return instrument;
-    }
-
-    public double getInitialMargin() {
-        return initialMargin;
-    }
-
-    public double getIndexPrice() {
-        return indexPrice;
-    }
-
-    public double getFloatingProfitLoss() {
-        return floatingProfitLoss;
-    }
-
-    public double getEstimatedLiquidationPrice() {
-        return estimatedLiquidationPrice;
-    }
-
-    public String getDirection() {
-        return direction;
-    }
-
-    public double getDelta() {
-        return delta;
-    }
-
-    public double getAveragePrice() {
-        return averagePrice;
-    }
+    // ##################################################################
+    // CONSTRUCTORS
+    // ##################################################################
 
     protected DeribitPosition(Builder builder)
     {
@@ -130,6 +67,11 @@ public class DeribitPosition extends BasePosition {
         this.averagePrice = builder.averagePrice;
     }
 
+
+    // ##################################################################
+    // BUILDER
+    // ##################################################################
+
     public static class Builder extends BasePosition.Builder<Builder>{
 
         // Content
@@ -145,8 +87,8 @@ public class DeribitPosition extends BasePosition {
 
         private double maintenanceMargin;
         private double leverage;
-        private String kind;
-        private String instrument;
+        private InstrumentKind kind;
+        private DeribitInstrument instrument;
 
         private double initialMargin;
         private double indexPrice;
@@ -217,22 +159,22 @@ public class DeribitPosition extends BasePosition {
             return self();
         }
 
-        public Builder setKind(String val) {
+        public Builder setKind(InstrumentKind val) {
             this.kind = val;
             return self();
         }
 
-        public Builder setInstrument(String val) {
+        public Builder setInstrument(DeribitInstrument val) {
             this.instrument = val;
             return self();
         }
 
-        public Builder setInitialMargin(int val) {
+        public Builder setInitialMargin(double val) {
             this.initialMargin = val;
             return self();
         }
 
-        public Builder setIndexPrice(int val) {
+        public Builder setIndexPrice(double val) {
             this.indexPrice = val;
             return self();
         }
@@ -252,7 +194,7 @@ public class DeribitPosition extends BasePosition {
             return self();
         }
 
-        public Builder setDelta(int val) {
+        public Builder setDelta(double val) {
             this.delta = val;
             return self();
         }
@@ -262,8 +204,90 @@ public class DeribitPosition extends BasePosition {
             return self();
         }
 
-
     }
+
+
+    // ##################################################################
+    // GETTERS
+    // ##################################################################
+
+    public double getTotalProfitLoss() {
+        return totalProfitLoss;
+    }
+
+    public double getSizeCurrency() {
+        return sizeCurrency;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
+    public double getSettlementPrice() {
+        return settlementPrice;
+    }
+
+    public double getRealizedProfitLoss() {
+        return realizedProfitLoss;
+    }
+
+    public double getRealizedFunding() {
+        return realizedFunding;
+    }
+
+    public double getOpenOrdersMargin() {
+        return openOrdersMargin;
+    }
+
+    public double getMarkPrice() {
+        return markPrice;
+    }
+
+    public double getMaintenanceMargin() {
+        return maintenanceMargin;
+    }
+
+    public double getLeverage() {
+        return leverage;
+    }
+
+    public InstrumentKind getKind() {
+        return kind;
+    }
+
+    public DeribitInstrument getInstrument() {
+        return instrument;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public double getInitialMargin() {
+        return initialMargin;
+    }
+
+    public double getIndexPrice() {
+        return indexPrice;
+    }
+
+    public double getFloatingProfitLoss() {
+        return floatingProfitLoss;
+    }
+
+    public double getEstimatedLiquidationPrice() {
+        return estimatedLiquidationPrice;
+    }
+
+
+    public double getDelta() {
+        return delta;
+    }
+
+    public double getAveragePrice() {
+        return averagePrice;
+    }
+
 
 }
 

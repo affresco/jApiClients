@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.LinkedHashMap;
 
-public class DeltaPositionMessage {
+public class DeribitPositionMessage {
 
     // ##################################################################
     // ATTRIBUTES
@@ -43,12 +43,11 @@ public class DeltaPositionMessage {
     private double delta;
     private double averagePrice;
 
-
     // ##################################################################
     // CONSTRUCTORS
     // ##################################################################
 
-    public DeltaPositionMessage(){}
+    public DeribitPositionMessage(){}
 
     // ##################################################################
     // GETTERS

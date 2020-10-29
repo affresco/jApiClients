@@ -2,10 +2,10 @@ package commons.models.currencies;
 
 public abstract class BaseCurrency {
 
-    private final String quoteCurrency;
-    private final String baseCurrency;
-    private final String symbol;
-    private final String name;
+    protected final String quoteCurrency;
+    protected final String baseCurrency;
+    protected final String symbol;
+    protected final String name;
 
     protected BaseCurrency(Builder<?> builder){
         this.quoteCurrency = builder.quoteCurrency;
