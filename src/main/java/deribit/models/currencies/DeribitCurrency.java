@@ -2,15 +2,13 @@ package deribit.models.currencies;
 
 import commons.models.currencies.BaseCurrency;
 import commons.standards.Cryptocurrency;
-import deribit.models.expiries.DeribitExpiry;
 
 import java.util.HashMap;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class DeribitCurrency extends BaseCurrency {
 
     // This contains the instances present in the system
-    private static HashMap<String, DeribitCurrency> currencies;
+    private static final HashMap<String, DeribitCurrency> instances = new HashMap<>();
 
     protected final Integer feePrecision;
     protected final Integer minimumConfirmations;
@@ -28,23 +26,17 @@ public class DeribitCurrency extends BaseCurrency {
 
     private static DeribitCurrency getInstance(DeribitCurrency.Builder builder){
 
-        // mAke sure we do have an instance of the HashMap
-        if (currencies == null) {
-            synchronized (currencies) {
-                currencies = new HashMap<>();
-            }
-        }
         // Already present, just return
         String uniqueIdentifier = builder.getUniqueIdentifier();
-        if (currencies.containsKey(uniqueIdentifier)){
-            return currencies.get(uniqueIdentifier);
+        if (instances.containsKey(uniqueIdentifier)){
+            return instances.get(uniqueIdentifier);
         }
 
         // Otherwise create it
         else {
             DeribitCurrency newCurrency = new DeribitCurrency(builder);
-            synchronized (currencies) {
-                currencies.put(builder.getUniqueIdentifier(), newCurrency);
+            synchronized (instances) {
+                instances.put(builder.getUniqueIdentifier(), newCurrency);
             }
             return newCurrency;
         }
@@ -94,10 +86,10 @@ public class DeribitCurrency extends BaseCurrency {
     }
 
     public Cryptocurrency getCryptoCurrency(){
-        if (this.quoteCurrency.equalsIgnoreCase("BTC")){
+        if (this.baseCurrency.equalsIgnoreCase("BTC")){
             return Cryptocurrency.BTC;
         }
-        if (this.quoteCurrency.equalsIgnoreCase("ETH")){
+        if (this.baseCurrency.equalsIgnoreCase("ETH")){
             return Cryptocurrency.ETH;
         }
         // Not sure what this is

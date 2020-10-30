@@ -1,7 +1,7 @@
 package deribit.client.delegates;
 
 import clients.models.messages.MessageHandler;
-import deribit.client.DeribitWebsocketClientCore;
+import deribit.client.core.DeribitWebsocketClientCore;
 
 public abstract class Delegate {
 

@@ -33,7 +33,7 @@ public class DeribitInstrument extends BaseInstrument {
 
         // Make sure we do have an instance of the HashMap
         if (instances == null) {
-            synchronized (instances) {
+            synchronized (DeribitInstrument.class) {
                 instances = new HashMap<>();
             }
         }

@@ -2,11 +2,11 @@ package commons.models.expiries;
 
 import commons.standards.SettlementPeriod;
 
-import java.util.Date;
+import java.time.Instant;
 
 public abstract class BaseExpiry {
 
-    private final Date expiryDate;
+    private final Instant expiryDate;
     private final SettlementPeriod settlementPeriod;
 
     protected BaseExpiry(Builder<?> builder){
@@ -16,10 +16,10 @@ public abstract class BaseExpiry {
 
     public abstract static class Builder<T extends Builder<T>>{
 
-        protected Date expiryDate;
+        protected Instant expiryDate;
         protected SettlementPeriod settlementPeriod;
 
-        public T setExpiryDate(Date val){
+        public T setExpiryDate(Instant val){
             this.expiryDate = val;
             return self();
         }

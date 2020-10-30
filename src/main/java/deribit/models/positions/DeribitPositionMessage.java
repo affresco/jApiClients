@@ -209,7 +209,7 @@ public class DeribitPositionMessage {
         floatingProfitLoss = Double.parseDouble(value.get("floating_profit_loss"));
         estimatedLiquidationPrice = Double.parseDouble(value.get("estimated_liquidation_price"));
         direction = value.get("direction");
-        delta = Double.parseDouble(value.get("deribit"));
+        delta = Double.parseDouble(value.get("delta"));
         averagePrice = Double.parseDouble(value.get("average_price"));
     }
 

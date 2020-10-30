@@ -1,7 +1,8 @@
-package deribit.client;
+package deribit.client.core;
 
 import clients.websocket.BaseWebsocketClient;
 import clients.models.messages.Message;
+import deribit.client.DeribitCredentials;
 import deribit.client.messages.AuthenticationMessage;
 import deribit.client.messages.SupportingMessage;
 

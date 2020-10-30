@@ -8,10 +8,17 @@ import java.text.ParseException;
 
 public class DeribitPositionFactory {
 
-    public static DeribitPosition getInstance(DeribitPositionMessage message) throws ParseException {
+    public static DeribitPosition getInstance(DeribitPositionMessage message) {
 
         // Instrument instance from factory
-        DeribitInstrument ins = DeribitInstrumentFactory.getInstanceFromSymbol(message.getInstrument());
+        DeribitInstrument ins = null;
+        try {
+
+            String instrumentName = message.getInstrument();
+            ins = DeribitInstrumentFactory.getInstanceFromSymbol(instrumentName);
+        } catch (ParseException e) {
+            return null;
+        }
 
         // Kind enum
         InstrumentKind kind = InstrumentKind.FUTURE;
@@ -28,9 +35,6 @@ public class DeribitPositionFactory {
                 .setMarkPrice(message.getMarkPrice())
                 .setMaintenanceMargin(message.getMaintenanceMargin())
                 .setLeverage(message.getLeverage())
-
-                // Kind is special
-                .setKind(kind)
 
                 // Instrument is special
                 .setInstrument(ins)

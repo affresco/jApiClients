@@ -5,6 +5,7 @@ import commons.standards.InstrumentKind;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.time.Instant;
 
 public class DeribitExpiryFactory {
 
@@ -25,13 +26,13 @@ public class DeribitExpiryFactory {
 
     private static DeribitExpiry getPerpetual() {
 
-        Date creationDate = new Date(0);
-        Date expiryDate = new Date(Long.MAX_VALUE);
+        Instant creationInstant = Instant.now();
+        Instant expiryInstant = Instant.MAX;
 
         DeribitExpiry.Builder builder = new DeribitExpiry.Builder();
         return builder
-                .setCreationDate(creationDate)
-                .setExpiryDate(expiryDate)
+                .setCreationDate(creationInstant)
+                .setExpiryDate(expiryInstant)
                 .setSettlementPeriod(null)
                 .build();
     }
@@ -40,12 +41,14 @@ public class DeribitExpiryFactory {
 
         String sDate = symbol.split("-")[1];
         Date expiryDate = new SimpleDateFormat("dd-MMM-yy").parse(sDate);
-        Date creationDate = new Date(0);
+        Instant expiryInstant = expiryDate.toInstant();
+
+        Instant creationInstant = Instant.now();
 
         DeribitExpiry.Builder builder = new DeribitExpiry.Builder();
         return builder
-                .setCreationDate(creationDate)
-                .setExpiryDate(expiryDate)
+                .setCreationDate(creationInstant)
+                .setExpiryDate(expiryInstant)
                 .setSettlementPeriod(null)
                 .build();
     }

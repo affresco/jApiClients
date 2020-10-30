@@ -3,7 +3,7 @@ package deribit.models.expiries;
 import commons.models.expiries.BaseExpiry;
 import deribit.models.currencies.DeribitCurrency;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ public class DeribitExpiry extends BaseExpiry {
     // This contains the instances present in the system
     private static HashMap<String, DeribitExpiry> expiries;
 
-    private final Date creationDate;
+    private final Instant creationDate;
 
     protected DeribitExpiry(Builder builder)
     {
@@ -24,7 +24,7 @@ public class DeribitExpiry extends BaseExpiry {
 
         // mAke sure we do have an instance of the HashMap
         if (expiries == null) {
-            synchronized (expiries) {
+            synchronized (DeribitExpiry.class) {
                 expiries = new HashMap<>();
             }
         }
@@ -37,7 +37,7 @@ public class DeribitExpiry extends BaseExpiry {
         // Otherwise create it
         else {
             DeribitExpiry newExpiry = new DeribitExpiry(builder);
-            synchronized (expiries) {
+            synchronized (DeribitExpiry.class) {
                 expiries.put(builder.getUniqueIdentifier(), newExpiry);
             }
             return newExpiry;
@@ -46,7 +46,7 @@ public class DeribitExpiry extends BaseExpiry {
 
     public static class Builder extends BaseExpiry.Builder<Builder>{
 
-        protected Date creationDate;
+        protected Instant creationDate;
 
         @Override
         public String getUniqueIdentifier() {
@@ -63,7 +63,7 @@ public class DeribitExpiry extends BaseExpiry {
             return this;
         }
 
-        public Builder setCreationDate(Date val){
+        public Builder setCreationDate(Instant val){
             this.creationDate = val;
             return self();
         }

@@ -3,10 +3,13 @@ package deribit.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import deribit.client.core.DeribitClientMonitor;
 import deribit.client.delegates.AccountDelegate;
 import deribit.client.delegates.MarketDelegate;
 import deribit.client.delegates.OrdersDelegate;
 import deribit.client.delegates.TradingDelegate;
+import deribit.models.positions.DeribitPosition;
+import deribit.models.positions.DeribitPositionFactory;
 import deribit.models.positions.DeribitPositionMessage;
 
 public class DeribitRequestClient extends DeribitClientMonitor {
@@ -65,6 +68,7 @@ public class DeribitRequestClient extends DeribitClientMonitor {
             double start = System.nanoTime();
 
             DeribitPositionMessage msg = objectMapper.readValue(res, DeribitPositionMessage.class);
+            DeribitPosition pos = DeribitPositionFactory.getInstance(msg);
 
             double end = System.nanoTime();
             double elapsed = (end - start) / 1000000.0;

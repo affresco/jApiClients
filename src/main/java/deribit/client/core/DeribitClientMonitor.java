@@ -1,5 +1,6 @@
-package deribit.client;
+package deribit.client.core;
 
+import deribit.client.DeribitCredentials;
 import deribit.client.delegates.SessionDelegate;
 import clients.events.ClientCreationFailureEventClient;
 import clients.events.ClientResetFailureEvent;

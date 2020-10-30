@@ -1,6 +1,7 @@
 package deribit.models.instruments;
 
 
+import commons.standards.Cryptocurrency;
 import commons.standards.InstrumentKind;
 import deribit.models.currencies.DeribitCurrency;
 import deribit.models.currencies.DeribitCurrencyFactory;
@@ -98,7 +99,6 @@ public class DeribitInstrumentFactory {
                 .build();
     }
 
-
     public static DeribitPerpetual getPerpetual(String symbol) throws ParseException {
 
         // Build a currency object
@@ -111,7 +111,8 @@ public class DeribitInstrumentFactory {
         DeribitExpiry expiry = DeribitExpiryFactory.getInstanceFromSymbol(symbol);
 
         // Get a fee structure
-        DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
+        Cryptocurrency c = currency.getCryptoCurrency();
+        DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(c, kind);
 
         // Get a market structure
         DeribitMarketStructure marketStructure = DeribitMarketStructureFactory.getInstance(currency.getCryptoCurrency(), kind);

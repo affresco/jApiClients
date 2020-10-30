@@ -4,6 +4,11 @@ import deribit.models.instruments.DeribitInstrumentFactory;
 
 public class DeribitCurrencyFactory {
 
+    private static final int BTC_FEE_PRECISION = 4;
+    private static final double BTC_WITHDRAWAL_FEE = 4;
+    private static final int BTC_MINIMUM_CONFIRMATIONS = 4;
+    private static final double BTC_MINIMUM_WITHDRAWAL_FEE = 4;
+
     private DeribitCurrencyFactory() {
     }
 

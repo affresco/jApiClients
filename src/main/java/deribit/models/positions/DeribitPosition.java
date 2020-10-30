@@ -23,7 +23,6 @@ public class DeribitPosition extends BasePosition {
     private final double leverage;
 
     // These are special...
-    private final InstrumentKind kind;
     private final DeribitInstrument instrument;
     private final String direction;
 
@@ -54,7 +53,6 @@ public class DeribitPosition extends BasePosition {
 
         this.maintenanceMargin = builder.maintenanceMargin;
         this.leverage = builder.leverage;
-        this.kind = builder.kind;
         this.instrument = builder.instrument;
 
         this.initialMargin = builder.initialMargin;
@@ -66,7 +64,6 @@ public class DeribitPosition extends BasePosition {
         this.delta = builder.delta;
         this.averagePrice = builder.averagePrice;
     }
-
 
     // ##################################################################
     // BUILDER
@@ -87,7 +84,6 @@ public class DeribitPosition extends BasePosition {
 
         private double maintenanceMargin;
         private double leverage;
-        private InstrumentKind kind;
         private DeribitInstrument instrument;
 
         private double initialMargin;
@@ -156,11 +152,6 @@ public class DeribitPosition extends BasePosition {
 
         public Builder setLeverage(double val) {
             this.leverage = val;
-            return self();
-        }
-
-        public Builder setKind(InstrumentKind val) {
-            this.kind = val;
             return self();
         }
 
@@ -249,10 +240,6 @@ public class DeribitPosition extends BasePosition {
 
     public double getLeverage() {
         return leverage;
-    }
-
-    public InstrumentKind getKind() {
-        return kind;
     }
 
     public DeribitInstrument getInstrument() {
