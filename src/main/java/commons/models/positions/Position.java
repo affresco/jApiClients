@@ -1,12 +1,12 @@
 package commons.models.positions;
 
-public abstract class BasePosition {
+public abstract class Position {
 
-    protected BasePosition(Builder<?> builder){ }
+    protected Position(Builder<?> builder){ }
 
     public abstract static class Builder<T extends Builder<T>>{
 
-        protected abstract BasePosition build();
+        protected abstract Position build();
         protected abstract T self();
     }
 

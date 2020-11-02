@@ -1,10 +1,9 @@
 package deribit.models.positions;
 
-import commons.models.positions.BasePosition;
-import commons.standards.InstrumentKind;
+import commons.models.positions.Position;
 import deribit.models.instruments.DeribitInstrument;
 
-public class DeribitPosition extends BasePosition {
+public class DeribitPosition extends Position {
 
     // ##################################################################
     // ATTRIBUTES
@@ -69,7 +68,7 @@ public class DeribitPosition extends BasePosition {
     // BUILDER
     // ##################################################################
 
-    public static class Builder extends BasePosition.Builder<Builder>{
+    public static class Builder extends Position.Builder<Builder>{
 
         // Content
         private double totalProfitLoss;

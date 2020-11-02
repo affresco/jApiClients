@@ -2,8 +2,8 @@ package deribit.client.delegates;
 
 import clients.models.messages.Message;
 import clients.models.messages.MessageHandler;
-import deribit.client.core.DeribitWebsocketClientCore;
-import deribit.client.messages.TradingMessage;
+import deribit.client.core.DeribitWebsocketClient;
+import deribit.client.factories.TradingMessage;
 import deribit.client.handlers.GenericMessageHandler;
 
 public class TradingDelegate extends Delegate {
@@ -12,7 +12,7 @@ public class TradingDelegate extends Delegate {
     // CONSTRUCTORS
     // ##################################################################
 
-    public TradingDelegate(DeribitWebsocketClientCore client) {
+    public TradingDelegate(DeribitWebsocketClient client) {
         super(client);
     }
 

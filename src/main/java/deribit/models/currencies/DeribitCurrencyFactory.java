@@ -1,13 +1,9 @@
 package deribit.models.currencies;
 
-import deribit.models.instruments.DeribitInstrumentFactory;
+import deribit.models.currencies.defaults.BitcoinDefaults;
+import deribit.models.currencies.defaults.EtherDefaults;
 
 public class DeribitCurrencyFactory {
-
-    private static final int BTC_FEE_PRECISION = 4;
-    private static final double BTC_WITHDRAWAL_FEE = 4;
-    private static final int BTC_MINIMUM_CONFIRMATIONS = 4;
-    private static final double BTC_MINIMUM_WITHDRAWAL_FEE = 4;
 
     private DeribitCurrencyFactory() {
     }
@@ -34,16 +30,16 @@ public class DeribitCurrencyFactory {
 
         DeribitCurrency.Builder builder = new DeribitCurrency.Builder();
         return builder
-                .setName("Bitcoin")
-                .setSymbol("BTC")
-                .setBaseCurrency("BTC")
-                .setQuoteCurrency("USD")
+                .setName(BitcoinDefaults.NAME)
+                .setSymbol(BitcoinDefaults.SYMBOL)
+                .setBaseCurrency(BitcoinDefaults.BASE_CURRENCY)
+                .setQuoteCurrency(BitcoinDefaults.QUOTE_CURRENCY)
 
-                // Default values: null
-                .setFeePrecision(null)
-                .setWithdrawalFee(null)
-                .setMinimumConfirmations(null)
-                .setMinimumWithdrawalFee(null)
+                // Default values
+                .setFeePrecision(BitcoinDefaults.FEE_PRECISION)
+                .setWithdrawalFee(BitcoinDefaults.WITHDRAWAL_FEE)
+                .setMinimumConfirmations(BitcoinDefaults.MINIMUM_CONFIRMATIONS)
+                .setMinimumWithdrawalFee(BitcoinDefaults.MINIMUM_WITHDRAWAL_FEE)
 
                 .build();
     }
@@ -52,16 +48,16 @@ public class DeribitCurrencyFactory {
 
         DeribitCurrency.Builder builder = new DeribitCurrency.Builder();
         return builder
-                .setName("Ether")
-                .setSymbol("ETH")
-                .setBaseCurrency("ETH")
-                .setQuoteCurrency("USD")
+                .setName(EtherDefaults.NAME)
+                .setSymbol(EtherDefaults.SYMBOL)
+                .setBaseCurrency(EtherDefaults.BASE_CURRENCY)
+                .setQuoteCurrency(EtherDefaults.QUOTE_CURRENCY)
 
                 // Default values: null
-                .setFeePrecision(null)
-                .setWithdrawalFee(null)
-                .setMinimumConfirmations(null)
-                .setMinimumWithdrawalFee(null)
+                .setFeePrecision(EtherDefaults.FEE_PRECISION)
+                .setWithdrawalFee(EtherDefaults.WITHDRAWAL_FEE)
+                .setMinimumConfirmations(EtherDefaults.MINIMUM_CONFIRMATIONS)
+                .setMinimumWithdrawalFee(EtherDefaults.MINIMUM_WITHDRAWAL_FEE)
 
                 .build();
     }

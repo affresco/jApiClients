@@ -2,8 +2,8 @@ package deribit.client.delegates;
 
 import clients.models.messages.Message;
 import clients.models.messages.MessageHandler;
-import deribit.client.core.DeribitWebsocketClientCore;
-import deribit.client.messages.OrderMessage;
+import deribit.client.core.DeribitWebsocketClient;
+import deribit.client.factories.OrderMessage;
 import deribit.client.handlers.GenericMessageHandler;
 
 
@@ -13,7 +13,7 @@ public class OrdersDelegate extends Delegate {
     // CONSTRUCTORS
     // ##################################################################
 
-    public OrdersDelegate(DeribitWebsocketClientCore client) {
+    public OrdersDelegate(DeribitWebsocketClient client) {
         super(client);
     }
 

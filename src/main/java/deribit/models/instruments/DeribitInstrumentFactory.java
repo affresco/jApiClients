@@ -3,14 +3,15 @@ package deribit.models.instruments;
 
 import commons.standards.Cryptocurrency;
 import commons.standards.InstrumentKind;
+
 import deribit.models.currencies.DeribitCurrency;
 import deribit.models.currencies.DeribitCurrencyFactory;
 import deribit.models.expiries.DeribitExpiry;
 import deribit.models.expiries.DeribitExpiryFactory;
 import deribit.models.fees.DeribitFeeStructure;
 import deribit.models.fees.DeribitFeeStructureFactory;
-import deribit.models.market.DeribitMarketStructure;
-import deribit.models.market.DeribitMarketStructureFactory;
+import deribit.models.contract.DeribitContractStructure;
+import deribit.models.contract.DeribitContractStructureFactory;
 
 import java.text.ParseException;
 
@@ -58,7 +59,7 @@ public class DeribitInstrumentFactory {
         DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
 
         // Get a market structure
-        DeribitMarketStructure marketStructure = DeribitMarketStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
+        DeribitContractStructure marketStructure = DeribitContractStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
 
         DeribitFuture.Builder builder = new DeribitFuture.Builder();
 
@@ -86,7 +87,7 @@ public class DeribitInstrumentFactory {
         DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
 
         // Get a market structure
-        DeribitMarketStructure marketStructure = DeribitMarketStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
+        DeribitContractStructure marketStructure = DeribitContractStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
 
         DeribitFuture.Builder builder = new DeribitFuture.Builder();
 
@@ -115,17 +116,19 @@ public class DeribitInstrumentFactory {
         DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(c, kind);
 
         // Get a market structure
-        DeribitMarketStructure marketStructure = DeribitMarketStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
+        DeribitContractStructure marketStructure = DeribitContractStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
 
-        DeribitFuture.Builder builder = new DeribitFuture.Builder();
+        DeribitPerpetual.Builder builder = new DeribitPerpetual.Builder();
 
-        return (DeribitPerpetual) builder
+        DeribitPerpetual perpetual = (DeribitPerpetual) builder
                 .setSymbol(symbol)
                 .setExpiry(expiry)
                 .setFeeStructure(feeStructure)
                 .setKind(kind)
                 .setMarketStructure(marketStructure)
                 .build();
+
+        return perpetual;
     }
 
 

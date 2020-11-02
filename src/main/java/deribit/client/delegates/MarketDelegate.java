@@ -1,7 +1,7 @@
 package deribit.client.delegates;
 
 import clients.models.messages.MessageHandler;
-import deribit.client.core.DeribitWebsocketClientCore;
+import deribit.client.core.DeribitWebsocketClient;
 import deribit.client.handlers.GenericMessageHandler;
 
 public class MarketDelegate extends Delegate {
@@ -10,7 +10,7 @@ public class MarketDelegate extends Delegate {
     // CONSTRUCTORS
     // ##################################################################
 
-    public MarketDelegate(DeribitWebsocketClientCore client) {
+    public MarketDelegate(DeribitWebsocketClient client) {
         super(client);
     }
 

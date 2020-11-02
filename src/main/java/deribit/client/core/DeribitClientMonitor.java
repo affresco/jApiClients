@@ -23,7 +23,7 @@ public class DeribitClientMonitor {
 
     // Client can be reset
     protected String clientId;
-    protected DeribitWebsocketClientCore client;
+    protected DeribitWebsocketClient client;
 
     // Delegates for making sessions request
     public SessionDelegate session;
@@ -111,7 +111,7 @@ public class DeribitClientMonitor {
         try {
             if (client == null) {
                 this.clientId = Identity.generateId(8);
-                client = new DeribitWebsocketClientCore(url, credentials, clientId);
+                client = new DeribitWebsocketClient(url, credentials, clientId);
                 client.maybe_reconnect();
                 return;
             }

@@ -1,4 +1,4 @@
-package deribit.client.messages;
+package deribit.client.factories;
 
 import clients.models.messages.Message;
 import deribit.client.endpoints.SessionEndpoints;

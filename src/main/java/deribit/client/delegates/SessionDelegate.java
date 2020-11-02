@@ -2,8 +2,8 @@ package deribit.client.delegates;
 
 import clients.models.messages.Message;
 import clients.models.messages.MessageHandler;
-import deribit.client.core.DeribitWebsocketClientCore;
-import deribit.client.messages.SessionMessage;
+import deribit.client.core.DeribitWebsocketClient;
+import deribit.client.factories.SessionMessage;
 import deribit.client.handlers.GenericMessageHandler;
 
 public class SessionDelegate extends Delegate {
@@ -13,7 +13,7 @@ public class SessionDelegate extends Delegate {
     // CONSTRUCTORS
     // ##################################################################
 
-    public SessionDelegate(DeribitWebsocketClientCore client) {
+    public SessionDelegate(DeribitWebsocketClient client) {
         super(client);
     }
 

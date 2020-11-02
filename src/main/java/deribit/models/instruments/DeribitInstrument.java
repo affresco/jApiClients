@@ -3,9 +3,10 @@ package deribit.models.instruments;
 import commons.models.instruments.BaseInstrument;
 
 import commons.standards.InstrumentKind;
+import deribit.models.currencies.DeribitCurrency;
 import deribit.models.expiries.DeribitExpiry;
 import deribit.models.fees.DeribitFeeStructure;
-import deribit.models.market.DeribitMarketStructure;
+import deribit.models.contract.DeribitContractStructure;
 
 import java.util.HashMap;
 
@@ -18,7 +19,7 @@ public class DeribitInstrument extends BaseInstrument {
     private final InstrumentKind kind;
     private final DeribitExpiry expiry;
     private final DeribitFeeStructure feeStructure;
-    private final DeribitMarketStructure marketStructure;
+    private final DeribitContractStructure marketStructure;
 
     protected DeribitInstrument(Builder builder)
     {
@@ -37,6 +38,7 @@ public class DeribitInstrument extends BaseInstrument {
                 instances = new HashMap<>();
             }
         }
+
         // Already present, just return
         String uniqueIdentifier = builder.getUniqueIdentifier();
         if (instances.containsKey(uniqueIdentifier)){
@@ -46,8 +48,7 @@ public class DeribitInstrument extends BaseInstrument {
         // Otherwise create it
         else {
             DeribitInstrument newInstrument = new DeribitInstrument(builder);
-
-            synchronized (instances) {
+            synchronized (DeribitInstrument.class) {
                 instances.put(builder.getUniqueIdentifier(), newInstrument);
             }
             return newInstrument;
@@ -59,7 +60,7 @@ public class DeribitInstrument extends BaseInstrument {
         protected InstrumentKind kind;
         protected DeribitExpiry expiry;
         protected DeribitFeeStructure feeStructure;
-        protected DeribitMarketStructure marketStructure;
+        protected DeribitContractStructure marketStructure;
 
         @Override
         protected String getUniqueIdentifier() {
@@ -68,7 +69,7 @@ public class DeribitInstrument extends BaseInstrument {
 
         @Override
         protected DeribitInstrument build() {
-            return null;
+            return DeribitInstrument.getInstance(this);
         }
 
         @Override
@@ -86,38 +87,20 @@ public class DeribitInstrument extends BaseInstrument {
             return self();
         }
 
+        public Builder setCurrency(DeribitCurrency val) {
+            this.currency = val;
+            return self();
+        }
+
         public Builder setFeeStructure(DeribitFeeStructure val) {
             this.feeStructure = val;
             return self();
         }
 
-        public Builder setMarketStructure(DeribitMarketStructure val) {
+        public Builder setMarketStructure(DeribitContractStructure val) {
             this.marketStructure = val;
             return self();
         }
     }
 }
 
-
-/*
-
-      // Local fields
-      "kind": "future",
-      "instrument_name": "BTC-26JUL19",
-
-      // Into expiry object
-      "is_active": true,
-      "settlement_period": "week",
-      "expiration_timestamp": 1564153200000,
-      "creation_timestamp": 1563522420000,
-
-      // into TradingCharacteristics object
-      "min_trade_amount": 1,
-      "leverage": 100,
-      "contract_size": 10,
-      "tick_size": 0.01,
-
-      // into Currency object
-      "base_currency": "BTC"
-      "quote_currency": "USD",
- */

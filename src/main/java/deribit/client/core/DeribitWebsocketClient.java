@@ -3,8 +3,8 @@ package deribit.client.core;
 import clients.websocket.BaseWebsocketClient;
 import clients.models.messages.Message;
 import deribit.client.DeribitCredentials;
-import deribit.client.messages.AuthenticationMessage;
-import deribit.client.messages.SupportingMessage;
+import deribit.client.factories.AuthenticationMessage;
+import deribit.client.factories.SupportingMessage;
 
 import deribit.client.handlers.GenericMessageHandler;
 
@@ -15,16 +15,14 @@ import clients.models.messages.MessageHandler;
 
 import java.net.URISyntaxException;
 
-public class DeribitWebsocketClientCore extends BaseWebsocketClient {
+public class DeribitWebsocketClient extends BaseWebsocketClient {
 
 
     // ##################################################################
     // INSTANCE VARIABLES
     // ##################################################################
 
-    private MessageHandler messageHandler;
-
-    private String clientId;
+    private final String clientId;
 
     private int connectionTimeout = 1;
     private int connectionCheckPeriod = 5;
@@ -38,11 +36,11 @@ public class DeribitWebsocketClientCore extends BaseWebsocketClient {
     // CONSTRUCTORS
     // ##################################################################
 
-    public DeribitWebsocketClientCore(String url, DeribitCredentials credentials, String clientId) throws URISyntaxException {
+    public DeribitWebsocketClient(String url, DeribitCredentials credentials, String clientId) throws URISyntaxException {
         this(url, credentials, clientId, true);
     }
 
-    public DeribitWebsocketClientCore(String url, DeribitCredentials credentials, String clientId, boolean blockOnConnection) throws URISyntaxException {
+    public DeribitWebsocketClient(String url, DeribitCredentials credentials, String clientId, boolean blockOnConnection) throws URISyntaxException {
         super(url, credentials);
         this.blockOnConnection = blockOnConnection;
         this.clientId = clientId;
@@ -102,6 +100,7 @@ public class DeribitWebsocketClientCore extends BaseWebsocketClient {
         addMessageHandler(message.getMessageId(), messageHandler);
 
         // Make the request through the websocket
+        String content = message.getContent();
         this.send(message.getContent());
 
         // Get the answer from the queue
@@ -179,4 +178,11 @@ public class DeribitWebsocketClientCore extends BaseWebsocketClient {
         return messageId;
     }
 
+    // ##################################################################
+    // GETTERS
+    // ##################################################################
+
+    public String getClientId() {
+        return new String(clientId);
+    }
 }

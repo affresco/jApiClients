@@ -1,15 +1,15 @@
-package deribit.models.market;
+package deribit.models.contract;
 
 import commons.models.market.BaseMarketStructure;
 
-public class DeribitMarketStructure extends BaseMarketStructure {
+public class DeribitContractStructure extends BaseMarketStructure {
 
     private final Double minimumTradeAmount;
     private final Double leverage;
     private final Double contractSize;
     private final Double tickSize;
 
-    protected DeribitMarketStructure(Builder builder) {
+    protected DeribitContractStructure(Builder builder) {
         super(builder);
         this.minimumTradeAmount = builder.minimumTradeAmount;
         this.leverage = builder.leverage;
@@ -25,8 +25,8 @@ public class DeribitMarketStructure extends BaseMarketStructure {
         protected Double tickSize;
 
         @Override
-        public DeribitMarketStructure build() {
-            return new DeribitMarketStructure(this);
+        public DeribitContractStructure build() {
+            return new DeribitContractStructure(this);
         }
 
         @Override
@@ -35,22 +35,22 @@ public class DeribitMarketStructure extends BaseMarketStructure {
         }
 
 
-        public DeribitMarketStructure.Builder setMinimumTradeAmount(Double val) {
+        public DeribitContractStructure.Builder setMinimumTradeAmount(Double val) {
             this.minimumTradeAmount = val;
             return self();
         }
 
-        public DeribitMarketStructure.Builder setLeverage(Double val) {
+        public DeribitContractStructure.Builder setLeverage(Double val) {
             this.leverage = val;
             return self();
         }
 
-        public DeribitMarketStructure.Builder setContractSize(Double val) {
+        public DeribitContractStructure.Builder setContractSize(Double val) {
             this.contractSize = val;
             return self();
         }
 
-        public DeribitMarketStructure.Builder setTickSize(Double val) {
+        public DeribitContractStructure.Builder setTickSize(Double val) {
             this.tickSize = val;
             return self();
         }

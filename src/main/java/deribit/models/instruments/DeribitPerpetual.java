@@ -8,9 +8,16 @@ public class DeribitPerpetual extends DeribitInstrument {
     }
 
     public static class Builder extends DeribitInstrument.Builder {
+
         @Override
-        protected DeribitPerpetual build() {
-            return (DeribitPerpetual) super.build();
+        protected DeribitPerpetual.Builder self() {
+            return this;
+        }
+
+        @Override
+        protected DeribitInstrument build() {
+            DeribitInstrument t = DeribitInstrument.getInstance(self());
+            return t;
         }
     }
 
