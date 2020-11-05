@@ -11,56 +11,31 @@ import deribit.models.contract.DeribitContractStructure;
 import java.util.HashMap;
 
 
-public class DeribitInstrument extends BaseInstrument {
-
-    // This contains the instances present in the system
-    private static HashMap<String, DeribitInstrument> instances;
+public abstract class DeribitInstrument extends BaseInstrument {
 
     private final InstrumentKind kind;
     private final DeribitExpiry expiry;
+    private final DeribitCurrency currency;
     private final DeribitFeeStructure feeStructure;
-    private final DeribitContractStructure marketStructure;
+    private final DeribitContractStructure contractStructure;
 
     protected DeribitInstrument(Builder builder)
     {
         super(builder);
         this.kind = builder.kind;
         this.expiry = builder.expiry;
+        this.currency = builder.currency;
         this.feeStructure = builder.feeStructure;
-        this.marketStructure = builder.marketStructure;
-    }
-
-    protected static DeribitInstrument getInstance(Builder builder){
-
-        // Make sure we do have an instance of the HashMap
-        if (instances == null) {
-            synchronized (DeribitInstrument.class) {
-                instances = new HashMap<>();
-            }
-        }
-
-        // Already present, just return
-        String uniqueIdentifier = builder.getUniqueIdentifier();
-        if (instances.containsKey(uniqueIdentifier)){
-            return instances.get(uniqueIdentifier);
-        }
-
-        // Otherwise create it
-        else {
-            DeribitInstrument newInstrument = new DeribitInstrument(builder);
-            synchronized (DeribitInstrument.class) {
-                instances.put(builder.getUniqueIdentifier(), newInstrument);
-            }
-            return newInstrument;
-        }
+        this.contractStructure = builder.contractStructure;
     }
 
     public static class Builder extends BaseInstrument.Builder<Builder>{
 
         protected InstrumentKind kind;
         protected DeribitExpiry expiry;
+        protected DeribitCurrency currency;
         protected DeribitFeeStructure feeStructure;
-        protected DeribitContractStructure marketStructure;
+        protected DeribitContractStructure contractStructure;
 
         @Override
         protected String getUniqueIdentifier() {
@@ -69,12 +44,12 @@ public class DeribitInstrument extends BaseInstrument {
 
         @Override
         protected DeribitInstrument build() {
-            return DeribitInstrument.getInstance(this);
+            return null;
         }
 
         @Override
         protected Builder self() {
-            return this;
+            return null;
         }
 
         public Builder setKind(InstrumentKind val) {
@@ -97,10 +72,35 @@ public class DeribitInstrument extends BaseInstrument {
             return self();
         }
 
-        public Builder setMarketStructure(DeribitContractStructure val) {
-            this.marketStructure = val;
+        public Builder setContractStructure(DeribitContractStructure val) {
+            this.contractStructure = val;
             return self();
         }
+    }
+
+    // ##################################################################
+    // GETTERS
+    // ##################################################################
+
+
+    public DeribitContractStructure getContractStructure() {
+        return new DeribitContractStructure(contractStructure);
+    }
+
+    public DeribitExpiry getExpiry() {
+        return new DeribitExpiry(expiry);
+    }
+
+    public DeribitFeeStructure getFeeStructure() {
+        return new DeribitFeeStructure(feeStructure);
+    }
+
+    public InstrumentKind getKind() {
+        return kind;
+    }
+
+    public DeribitCurrency getCurrency() {
+        return new DeribitCurrency(currency);
     }
 }
 

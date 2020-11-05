@@ -6,7 +6,7 @@ public enum InstrumentKind {
     FUTURE,
     OPTION,
     PERPETUAL,
-    SPOT;
+    INDEX;
 
     public static InstrumentKind getKindForDeribit(String instrument) {
 
@@ -28,6 +28,11 @@ public enum InstrumentKind {
         // This is an future, e.g. BTC-25DEC20
         if (length == 2) {
             return InstrumentKind.FUTURE;
+        }
+
+        // Maybe the index, e.g. BTC_USD
+        if (length == 1 && instrument.contains("_")) {
+            return InstrumentKind.INDEX;
         }
 
         // Not sure what this is

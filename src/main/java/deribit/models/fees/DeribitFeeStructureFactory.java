@@ -2,6 +2,8 @@ package deribit.models.fees;
 
 import commons.standards.Cryptocurrency;
 import commons.standards.InstrumentKind;
+import deribit.models.fees.defaults.BitcoinDefaultFees;
+import deribit.models.fees.defaults.EtherDefaultFees;
 
 public class DeribitFeeStructureFactory {
 
@@ -38,16 +40,16 @@ public class DeribitFeeStructureFactory {
     private static DeribitFeeStructure getBitcoinFeeStructureForConvex() {
         DeribitFeeStructure.Builder builder = new DeribitFeeStructure.Builder();
         return builder
-                .setLiquidityMaker(null)
-                .setLiquidityMaker(null)
+                .setLiquidityTaker(BitcoinDefaultFees.OPTION_TAKER_FROM_UNDERLYING)
+                .setLiquidityMaker(BitcoinDefaultFees.OPTION_MAKER_FROM_UNDERLYING)
                 .build();
     }
 
     private static DeribitFeeStructure getBitcoinFeeStructureForLinear() {
         DeribitFeeStructure.Builder builder = new DeribitFeeStructure.Builder();
         return builder
-                .setLiquidityMaker(null)
-                .setLiquidityMaker(null)
+                .setLiquidityTaker(BitcoinDefaultFees.FUTURE_TAKER)
+                .setLiquidityMaker(BitcoinDefaultFees.FUTURE_MAKER)
                 .build();
     }
 
@@ -65,16 +67,16 @@ public class DeribitFeeStructureFactory {
     private static DeribitFeeStructure getEtherFeeStructureForConvex() {
         DeribitFeeStructure.Builder builder = new DeribitFeeStructure.Builder();
         return builder
-                .setLiquidityMaker(null)
-                .setLiquidityMaker(null)
+                .setLiquidityTaker(EtherDefaultFees.OPTION_TAKER_FROM_UNDERLYING)
+                .setLiquidityMaker(EtherDefaultFees.OPTION_MAKER_FROM_UNDERLYING)
                 .build();
     }
 
     private static DeribitFeeStructure getEtherFeeStructureForLinear() {
         DeribitFeeStructure.Builder builder = new DeribitFeeStructure.Builder();
         return builder
-                .setLiquidityMaker(null)
-                .setLiquidityMaker(null)
+                .setLiquidityTaker(EtherDefaultFees.FUTURE_MAKER)
+                .setLiquidityMaker(EtherDefaultFees.FUTURE_MAKER)
                 .build();
     }
 

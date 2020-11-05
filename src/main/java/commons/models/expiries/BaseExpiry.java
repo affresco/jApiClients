@@ -14,6 +14,11 @@ public abstract class BaseExpiry {
         this.settlementPeriod = builder.settlementPeriod;
     }
 
+    public BaseExpiry(BaseExpiry expiry){
+        this.expiryDate = expiry.getExpiryDate();
+        this.settlementPeriod = expiry.getSettlementPeriod();
+    }
+
     public abstract static class Builder<T extends Builder<T>>{
 
         protected Instant expiryDate;
@@ -34,4 +39,11 @@ public abstract class BaseExpiry {
         protected abstract T self();
     }
 
+    public Instant getExpiryDate() {
+        return Instant.from(expiryDate);
+    }
+
+    public SettlementPeriod getSettlementPeriod() {
+        return settlementPeriod;
+    }
 }

@@ -1,34 +1,35 @@
 package deribit.models.instruments;
 
+
 import java.util.HashMap;
 
-public class DeribitFuture extends DeribitInstrument {
+public class DeribitIndex extends DeribitInstrument {
 
     // This contains the instances present in the system
-    private static HashMap<String, DeribitFuture> instances;
+    private static HashMap<String, DeribitIndex> instances;
 
-    protected DeribitFuture(Builder builder) {
+    protected DeribitIndex(Builder builder) {
         super(builder);
     }
 
     public static class Builder extends DeribitInstrument.Builder {
 
         @Override
-        protected DeribitFuture.Builder self() {
+        protected DeribitIndex.Builder self() {
             return this;
         }
 
         @Override
-        protected DeribitFuture build() {
-            return DeribitFuture.getInstance(this);
+        protected DeribitIndex build() {
+            return DeribitIndex.getInstance(this);
         }
     }
 
-    public static DeribitFuture getInstance(DeribitFuture.Builder builder){
+    public static DeribitIndex getInstance(DeribitIndex.Builder builder){
 
         // Make sure we do have an instance of the HashMap
         if (instances == null) {
-            synchronized (DeribitFuture.class) {
+            synchronized (DeribitIndex.class) {
                 instances = new HashMap<>();
             }
         }
@@ -41,8 +42,8 @@ public class DeribitFuture extends DeribitInstrument {
 
         // Otherwise create it
         else {
-            DeribitFuture newInstrument = new DeribitFuture(builder);
-            synchronized (DeribitFuture.class) {
+            DeribitIndex newInstrument = new DeribitIndex(builder);
+            synchronized (DeribitIndex.class) {
                 instances.put(builder.getUniqueIdentifier(), newInstrument);
             }
             return newInstrument;
@@ -50,3 +51,4 @@ public class DeribitFuture extends DeribitInstrument {
     }
 
 }
+

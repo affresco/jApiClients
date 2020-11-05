@@ -24,6 +24,15 @@ public class DeribitCurrency extends BaseCurrency {
         this.withdrawalFee = builder.withdrawalFee;
     }
 
+    public DeribitCurrency(DeribitCurrency currency)
+    {
+        super(currency);
+        this.feePrecision = currency.feePrecision;
+        this.minimumConfirmations = currency.minimumConfirmations;
+        this.minimumWithdrawalFee = currency.minimumWithdrawalFee;
+        this.withdrawalFee = currency.withdrawalFee;
+    }
+
     private static DeribitCurrency getInstance(DeribitCurrency.Builder builder){
 
         // Already present, just return

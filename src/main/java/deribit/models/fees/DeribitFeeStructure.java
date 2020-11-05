@@ -4,8 +4,8 @@ import commons.models.fees.BaseFeeStructure;
 
 public class DeribitFeeStructure extends BaseFeeStructure {
 
-    private final Double liquidityTaker;
-    private final Double liquidityMaker;
+    private final double liquidityTaker;
+    private final double liquidityMaker;
 
     protected DeribitFeeStructure(Builder builder) {
         super(builder);
@@ -13,11 +13,16 @@ public class DeribitFeeStructure extends BaseFeeStructure {
         this.liquidityMaker = builder.liquidityMaker;
     }
 
+    public DeribitFeeStructure(DeribitFeeStructure feeStructure){
+        super(feeStructure);
+        this.liquidityTaker = feeStructure.getLiquidityTaker();
+        this.liquidityMaker = feeStructure.getLiquidityMaker();
+    }
 
     public static class Builder extends BaseFeeStructure.Builder<Builder>{
 
-        protected Double liquidityTaker;
-        protected Double liquidityMaker;
+        protected double liquidityTaker;
+        protected double liquidityMaker;
 
         @Override
         public DeribitFeeStructure build() {
@@ -29,15 +34,22 @@ public class DeribitFeeStructure extends BaseFeeStructure {
             return this;
         }
 
-        public Builder setLiquidityTaker(Double val) {
+        public Builder setLiquidityTaker(double val) {
             this.liquidityTaker = val;
             return self();
         }
 
-        public Builder setLiquidityMaker(Double val) {
+        public Builder setLiquidityMaker(double val) {
             this.liquidityMaker = val;
             return self();
         }
     }
 
+    public double getLiquidityMaker() {
+        return liquidityMaker;
+    }
+
+    public double getLiquidityTaker() {
+        return liquidityTaker;
+    }
 }

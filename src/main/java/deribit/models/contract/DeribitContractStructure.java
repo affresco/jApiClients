@@ -1,13 +1,13 @@
 package deribit.models.contract;
 
-import commons.models.market.BaseMarketStructure;
+import commons.models.market.BaseContractStructure;
 
-public class DeribitContractStructure extends BaseMarketStructure {
+public class DeribitContractStructure extends BaseContractStructure {
 
-    private final Double minimumTradeAmount;
-    private final Double leverage;
-    private final Double contractSize;
-    private final Double tickSize;
+    private final double minimumTradeAmount;
+    private final double leverage;
+    private final double contractSize;
+    private final double tickSize;
 
     protected DeribitContractStructure(Builder builder) {
         super(builder);
@@ -17,12 +17,20 @@ public class DeribitContractStructure extends BaseMarketStructure {
         this.tickSize = builder.tickSize;
     }
 
-    public static class Builder extends BaseMarketStructure.Builder<Builder>{
+    public DeribitContractStructure(DeribitContractStructure contractStructure) {
+        super(contractStructure);
+        this.minimumTradeAmount = contractStructure.getMinimumTradeAmount();
+        this.leverage = contractStructure.getLeverage();
+        this.contractSize = contractStructure.getContractSize();
+        this.tickSize = contractStructure.getTickSize();
+    }
 
-        protected Double minimumTradeAmount;
-        protected Double leverage;
-        protected Double contractSize;
-        protected Double tickSize;
+    public static class Builder extends BaseContractStructure.Builder<Builder>{
+
+        protected double minimumTradeAmount;
+        protected double leverage;
+        protected double contractSize;
+        protected double tickSize;
 
         @Override
         public DeribitContractStructure build() {
@@ -35,25 +43,44 @@ public class DeribitContractStructure extends BaseMarketStructure {
         }
 
 
-        public DeribitContractStructure.Builder setMinimumTradeAmount(Double val) {
+        public DeribitContractStructure.Builder setMinimumTradeAmount(double val) {
             this.minimumTradeAmount = val;
             return self();
         }
 
-        public DeribitContractStructure.Builder setLeverage(Double val) {
+        public DeribitContractStructure.Builder setLeverage(double val) {
             this.leverage = val;
             return self();
         }
 
-        public DeribitContractStructure.Builder setContractSize(Double val) {
+        public DeribitContractStructure.Builder setContractSize(double val) {
             this.contractSize = val;
             return self();
         }
 
-        public DeribitContractStructure.Builder setTickSize(Double val) {
+        public DeribitContractStructure.Builder setTickSize(double val) {
             this.tickSize = val;
             return self();
         }
     }
 
+    // ##################################################################
+    // GETTERS
+    // ##################################################################
+
+    public double getContractSize() {
+        return contractSize;
+    }
+
+    public double getLeverage() {
+        return leverage;
+    }
+
+    public double getTickSize() {
+        return tickSize;
+    }
+
+    public double getMinimumTradeAmount() {
+        return minimumTradeAmount;
+    }
 }

@@ -1,14 +1,13 @@
 package commons.standards;
 
-
-public enum Cryptocurrency
+public enum FiatCurrency
 {
-    BTC(0),
-    ETH(1);
+    USD(0),
+    EUR(1);
 
     private final int integerRepresentation;
 
-    Cryptocurrency(int integerRepresentation) {
+    FiatCurrency(int integerRepresentation) {
         this.integerRepresentation = integerRepresentation;
     }
 
@@ -19,4 +18,5 @@ public enum Cryptocurrency
     public boolean equalsIgnoreCase(String other){
         return other.equalsIgnoreCase(this.toString());
     }
+
 }

@@ -3,6 +3,7 @@ package apps.market.models.quotes;
 import apps.market.exceptions.InvalidMessageException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import commons.standards.Cryptocurrency;
 import deribit.models.instruments.DeribitInstrument;
 import deribit.models.instruments.DeribitInstrumentFactory;
 
@@ -16,13 +17,12 @@ public class DeribitQuoteMessage {
     // ATTRIBUTES
     // ##################################################################
 
-    // Message ID and protocol
-    private String jsonrpc;
-    private String method;
-
-    // Content: some quote
     @JsonIgnore
-    private DeribitQuote quote;
+    private String jsonrpc = "2.0";
+    @JsonIgnore
+    private String method = "subscription";
+    @JsonIgnore
+    protected DeribitQuote quote;
 
     // ##################################################################
     // CONSTRUCTORS
@@ -40,23 +40,27 @@ public class DeribitQuoteMessage {
     // ##################################################################
 
     public String getJsonrpc() {
-        return this.jsonrpc;
+        return new String(jsonrpc);
     }
 
+    public String getMethod() {
+        return new String(method);
+    }
 
     // ##################################################################
     // SETTERS -- LOADING WITH JACKSON DATABIND
     // ##################################################################
 
-    @JsonProperty("jsonrpc")
+    @JsonIgnore
     public void setJsonrpc(String value) {
         this.jsonrpc = value;
     }
 
-    @JsonProperty("method")
+    @JsonIgnore
     public void setMethod(String value) {
         this.method = value;
     }
+
 
     @JsonProperty("params")
     public void setParams(LinkedHashMap<String, Object> value) throws InvalidMessageException {
@@ -64,8 +68,11 @@ public class DeribitQuoteMessage {
         // Cast works, this info is definitely of type 'String'
         String instrumentSymbol = ((String) value.get("channel")).split("\\.")[1];
         DeribitInstrument instrument;
+        Cryptocurrency currency;
         try {
             instrument = DeribitInstrumentFactory.getInstanceFromSymbol(instrumentSymbol);
+            currency = instrument.getCurrency().getCryptoCurrency();
+
         } catch (ParseException e) {
             throw new InvalidMessageException();
         }
@@ -91,9 +98,45 @@ public class DeribitQuoteMessage {
                 .setAskQuantity(askQuantity)
                 .setTimestamp(timestamp)
                 .setInstrument(instrument)
+                .setCurrency(currency)
                 .build();
 
     }
 
 
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,11 +1,9 @@
 package deribit.models.expiries;
 
 import commons.models.expiries.BaseExpiry;
-import deribit.models.currencies.DeribitCurrency;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class DeribitExpiry extends BaseExpiry {
 
@@ -18,6 +16,12 @@ public class DeribitExpiry extends BaseExpiry {
     {
         super(builder);
         this.creationDate = builder.creationDate;
+    }
+
+    public DeribitExpiry(DeribitExpiry expiry)
+    {
+        super(expiry);
+        this.creationDate = expiry.getCreationDate();
     }
 
     private static DeribitExpiry getInstance(DeribitExpiry.Builder builder){
@@ -70,6 +74,9 @@ public class DeribitExpiry extends BaseExpiry {
 
     }
 
+    public Instant getCreationDate() {
+        return Instant.from(creationDate);
+    }
 }
 
 

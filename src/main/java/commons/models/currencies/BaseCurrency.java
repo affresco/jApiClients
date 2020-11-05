@@ -1,11 +1,22 @@
 package commons.models.currencies;
 
+import commons.standards.Cryptocurrency;
+import commons.standards.FiatCurrency;
+
 public abstract class BaseCurrency {
 
-    protected final String quoteCurrency;
-    protected final String baseCurrency;
+    // ##################################################################
+    // ATTRIBUTES
+    // ##################################################################
+
+    protected final FiatCurrency quoteCurrency;
+    protected final Cryptocurrency baseCurrency;
     protected final String symbol;
     protected final String name;
+
+    // ##################################################################
+    // CONSTRUCTORS
+    // ##################################################################
 
     protected BaseCurrency(Builder<?> builder){
         this.quoteCurrency = builder.quoteCurrency;
@@ -14,19 +25,30 @@ public abstract class BaseCurrency {
         this.name = builder.name;
     }
 
+    protected BaseCurrency(BaseCurrency currency){
+        this.quoteCurrency = currency.getQuoteCurrency();
+        this.baseCurrency = currency.getBaseCurrency();
+        this.symbol = currency.getSymbol();
+        this.name = currency.getName();
+    }
+
+    // ##################################################################
+    // BUILDER
+    // ##################################################################
+
     public abstract static class Builder<T extends Builder<T>>{
 
-        protected String quoteCurrency;
-        protected String baseCurrency;
+        protected FiatCurrency quoteCurrency;
+        protected Cryptocurrency baseCurrency;
         protected String symbol;
         protected String name;
 
-        public T setQuoteCurrency(String val){
+        public T setQuoteCurrency(FiatCurrency val){
             this.quoteCurrency = val;
             return self();
         }
 
-        public T setBaseCurrency(String val){
+        public T setBaseCurrency(Cryptocurrency val){
             this.baseCurrency = val;
             return self();
         }
@@ -46,4 +68,23 @@ public abstract class BaseCurrency {
         protected abstract T self();
     }
 
+    // ##################################################################
+    // GETTERS
+    // ##################################################################
+
+    public Cryptocurrency getBaseCurrency() {
+        return baseCurrency;
+    }
+
+    public String getName() {
+        return new String(name);
+    }
+
+    public FiatCurrency getQuoteCurrency() {
+        return quoteCurrency;
+    }
+
+    public String getSymbol() {
+        return new String(symbol);
+    }
 }

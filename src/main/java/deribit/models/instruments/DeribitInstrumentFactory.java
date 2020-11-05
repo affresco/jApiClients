@@ -15,7 +15,7 @@ import deribit.models.contract.DeribitContractStructureFactory;
 
 import java.text.ParseException;
 
-public class DeribitInstrumentFactory {
+public abstract class DeribitInstrumentFactory {
 
     private DeribitInstrumentFactory() {
     }
@@ -28,15 +28,19 @@ public class DeribitInstrumentFactory {
         InstrumentKind kind = InstrumentKind.getKindForDeribit(s);
 
         if (kind == InstrumentKind.PERPETUAL) {
-            return getPerpetual(s);
+            return getPerpetual(s, kind);
         }
 
         if (kind == InstrumentKind.FUTURE) {
-            return getFuture(s);
+            return getFuture(s, kind);
         }
 
         if (kind == InstrumentKind.OPTION) {
-            return getOption(s);
+            return getOption(s, kind);
+        }
+
+        if (kind == InstrumentKind.INDEX) {
+            return getIndex(s, kind);
         }
 
         // Not sure what this is
@@ -44,13 +48,37 @@ public class DeribitInstrumentFactory {
 
     }
 
-    public static DeribitFuture getFuture(String symbol) throws ParseException {
+    public static DeribitPerpetual getPerpetual(String symbol, InstrumentKind kind) throws ParseException {
 
         // Build a currency object
         DeribitCurrency currency = DeribitCurrencyFactory.getInstanceFromSymbol(symbol.substring(0, 3));
 
-        // Get a kind
-        InstrumentKind kind = InstrumentKind.FUTURE;
+        // Get an expiry structure
+        DeribitExpiry expiry = DeribitExpiryFactory.getInstanceFromSymbol(symbol);
+
+        // Get a fee structure
+        Cryptocurrency c = currency.getCryptoCurrency();
+        DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(c, kind);
+
+        // Get a market structure
+        DeribitContractStructure marketStructure = DeribitContractStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
+
+        DeribitPerpetual.Builder builder = new DeribitPerpetual.Builder();
+
+        return (DeribitPerpetual) builder
+                .setSymbol(symbol)
+                .setExpiry(expiry)
+                .setCurrency(currency)
+                .setFeeStructure(feeStructure)
+                .setKind(kind)
+                .setContractStructure(marketStructure)
+                .build();
+    }
+
+    public static DeribitFuture getFuture(String symbol, InstrumentKind kind) throws ParseException {
+
+        // Build a currency object
+        DeribitCurrency currency = DeribitCurrencyFactory.getInstanceFromSymbol(symbol.substring(0, 3));
 
         // Get an expiry structure
         DeribitExpiry expiry = DeribitExpiryFactory.getInstanceFromSymbol(symbol);
@@ -66,19 +94,17 @@ public class DeribitInstrumentFactory {
         return (DeribitFuture) builder
                 .setSymbol(symbol)
                 .setExpiry(expiry)
+                .setCurrency(currency)
                 .setFeeStructure(feeStructure)
                 .setKind(kind)
-                .setMarketStructure(marketStructure)
+                .setContractStructure(marketStructure)
                 .build();
     }
 
-    public static DeribitOption getOption(String symbol) throws ParseException {
+    public static DeribitOption getOption(String symbol, InstrumentKind kind) throws ParseException {
 
         // Build a currency object
         DeribitCurrency currency = DeribitCurrencyFactory.getInstanceFromSymbol(symbol.substring(0, 3));
-
-        // Get a kind
-        InstrumentKind kind = InstrumentKind.OPTION;
 
         // Get an expiry structure
         DeribitExpiry expiry = DeribitExpiryFactory.getInstanceFromSymbol(symbol);
@@ -94,42 +120,25 @@ public class DeribitInstrumentFactory {
         return (DeribitOption) builder
                 .setSymbol(symbol)
                 .setExpiry(expiry)
+                .setCurrency(currency)
                 .setFeeStructure(feeStructure)
                 .setKind(kind)
-                .setMarketStructure(marketStructure)
+                .setContractStructure(marketStructure)
                 .build();
     }
 
-    public static DeribitPerpetual getPerpetual(String symbol) throws ParseException {
+    public static DeribitIndex getIndex(String symbol, InstrumentKind kind) {
 
         // Build a currency object
         DeribitCurrency currency = DeribitCurrencyFactory.getInstanceFromSymbol(symbol.substring(0, 3));
 
-        // Get a kind
-        InstrumentKind kind = InstrumentKind.PERPETUAL;
+        DeribitIndex.Builder builder = new DeribitIndex.Builder();
 
-        // Get an expiry structure
-        DeribitExpiry expiry = DeribitExpiryFactory.getInstanceFromSymbol(symbol);
-
-        // Get a fee structure
-        Cryptocurrency c = currency.getCryptoCurrency();
-        DeribitFeeStructure feeStructure = DeribitFeeStructureFactory.getInstance(c, kind);
-
-        // Get a market structure
-        DeribitContractStructure marketStructure = DeribitContractStructureFactory.getInstance(currency.getCryptoCurrency(), kind);
-
-        DeribitPerpetual.Builder builder = new DeribitPerpetual.Builder();
-
-        DeribitPerpetual perpetual = (DeribitPerpetual) builder
+        return (DeribitIndex) builder
                 .setSymbol(symbol)
-                .setExpiry(expiry)
-                .setFeeStructure(feeStructure)
+                .setCurrency(currency)
                 .setKind(kind)
-                .setMarketStructure(marketStructure)
                 .build();
-
-        return perpetual;
     }
-
 
 }
