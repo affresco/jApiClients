@@ -13,11 +13,19 @@ import java.util.HashMap;
 
 public abstract class DeribitInstrument extends BaseInstrument {
 
+    // ##################################################################
+    // ATTRIBUTES
+    // ##################################################################
+
     private final InstrumentKind kind;
     private final DeribitExpiry expiry;
     private final DeribitCurrency currency;
     private final DeribitFeeStructure feeStructure;
     private final DeribitContractStructure contractStructure;
+
+    // ##################################################################
+    // CONSTRUCTORS
+    // ##################################################################
 
     protected DeribitInstrument(Builder builder)
     {
@@ -28,6 +36,10 @@ public abstract class DeribitInstrument extends BaseInstrument {
         this.feeStructure = builder.feeStructure;
         this.contractStructure = builder.contractStructure;
     }
+
+    // ##################################################################
+    // BUILD (STATIC CLASS)
+    // ##################################################################
 
     public static class Builder extends BaseInstrument.Builder<Builder>{
 

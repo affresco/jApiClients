@@ -5,12 +5,24 @@ import java.util.HashMap;
 
 public class DeribitIndex extends DeribitInstrument {
 
+    // ##################################################################
+    // ATTRIBUTES
+    // ##################################################################
+
     // This contains the instances present in the system
     private static HashMap<String, DeribitIndex> instances;
+
+    // ##################################################################
+    // CONSTRUCTORS
+    // ##################################################################
 
     protected DeribitIndex(Builder builder) {
         super(builder);
     }
+
+    // ##################################################################
+    // BUILD (STATIC CLASS)
+    // ##################################################################
 
     public static class Builder extends DeribitInstrument.Builder {
 
@@ -24,6 +36,10 @@ public class DeribitIndex extends DeribitInstrument {
             return DeribitIndex.getInstance(this);
         }
     }
+
+    // ##################################################################
+    // CLASS METHODS
+    // ##################################################################
 
     public static DeribitIndex getInstance(DeribitIndex.Builder builder){
 
