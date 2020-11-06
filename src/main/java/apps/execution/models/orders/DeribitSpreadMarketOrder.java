@@ -1,6 +1,9 @@
 package apps.execution.models.orders;
 
+import apps.execution.models.atomic.DeribitAtomicMarketOrder;
 import apps.execution.models.atomic.DeribitAtomicOrder;
+import apps.execution.models.support.AtomicOrdersScheduleBuilder;
+import apps.execution.models.support.DeribitAtomicOrderSchedule;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
 import deribit.models.instruments.DeribitInstrument;
@@ -13,7 +16,7 @@ public class DeribitSpreadMarketOrder extends DeribitOrder {
     // ATTRIBUTES
     // ##################################################################
 
-    private HashMap<Integer, DeribitAtomicOrder> executionSchedule;
+    private DeribitAtomicOrderSchedule executionSchedule;
 
     // Total (maximum) duration of this order
     private final int durationInSeconds = 120;
@@ -38,9 +41,13 @@ public class DeribitSpreadMarketOrder extends DeribitOrder {
     // ##################################################################
 
     @Override
-    public HashMap<Integer, DeribitAtomicOrder> getExecutionSchedule() {
+    public DeribitAtomicOrderSchedule getExecutionSchedule() {
         if(executionSchedule == null){
-            setExecutionSchedule();
+            try {
+                setExecutionSchedule();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return executionSchedule;
     }
@@ -65,15 +72,40 @@ public class DeribitSpreadMarketOrder extends DeribitOrder {
     // CORE
     // ##################################################################
 
-    private void setExecutionSchedule(){
+    private void setExecutionSchedule() throws Exception {
         if(executionSchedule == null){
             setExecutionSchedule();
         }
         executionSchedule = buildSchedule();
     }
 
-    private HashMap<Integer, DeribitAtomicOrder> buildSchedule(){
-        return null;
+    private DeribitAtomicOrderSchedule buildSchedule() throws Exception {
+
+        // Get a temporary schedule with the amounts
+        HashMap<Integer, Double> amountSchedule = AtomicOrdersScheduleBuilder.buildSchedule(getAmount(),
+                getMinimumTradeAmount(), durationInSeconds, minimumTimeSpacingInSeconds);
+
+        DeribitAtomicOrderSchedule schedule = new DeribitAtomicOrderSchedule();
+        int k = 0;
+
+        for(int t: amountSchedule.keySet()) {
+            String subLabel = getLabel() + "-" + k;
+            schedule.add(t, new DeribitAtomicMarketOrder(getInstrument(), amountSchedule.get(t), getDirection(), subLabel));
+        }
+        return schedule;
+
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

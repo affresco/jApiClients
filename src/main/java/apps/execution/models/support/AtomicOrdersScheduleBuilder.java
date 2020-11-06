@@ -1,10 +1,10 @@
-package apps.execution.models.orders;
+package apps.execution.models.support;
 
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OrderScheduleBuilder {
+public class AtomicOrdersScheduleBuilder {
 
     // ##################################################################
     // ATTRIBUTES
@@ -16,20 +16,20 @@ public class OrderScheduleBuilder {
     // CONSTRUCTOR
     // ##################################################################
 
-    private OrderScheduleBuilder() {
+    private AtomicOrdersScheduleBuilder() {
     }
 
     // ##################################################################
-    // STATIC PUBLIC METHODS
+    // INTERFACE
     // ##################################################################
 
-    public static HashMap<Integer, Double> buildSchedule(double amount, double minimumTradeAmount, double durationInSeconds, double minimumTimeSpacingInSeconds){
+    public static HashMap<Integer, Double> buildSchedule(double amount, double minimumTradeAmount, double durationInSeconds, double minimumTimeSpacingInSeconds) throws Exception {
 
         // Total number of units to be traded
         int totalTradingUnits = getNumberOfTradeUnits(amount, minimumTradeAmount);
 
         // No real schedule to be made here
-        if(totalTradingUnits == 1){
+        if (totalTradingUnits == 1) {
             HashMap<Integer, Double> schedule = new HashMap<>();
             schedule.put(0, minimumTradeAmount);
             return schedule;
@@ -42,16 +42,33 @@ public class OrderScheduleBuilder {
         ArrayList<Integer> tradingTimes = getTradingTimeSchedule(durationInSeconds, timeStepInSeconds);
 
         // Make a first pass at the schedule
-        HashMap<Integer, Integer>  baseUnitSchedule = buildUnitSchedule(tradingTimes, totalTradingUnits);
+        HashMap<Integer, Integer> baseUnitSchedule = buildUnitSchedule(tradingTimes, totalTradingUnits);
 
-        int mismatch = computeTotalNumberOfUnits(baseUnitSchedule);
+        int residualUnits = totalTradingUnits - computeTotalNumberOfUnits(baseUnitSchedule);
 
-        if (mismatch == 0){
+        if (residualUnits == 0) {
             return finalizeSchedule(baseUnitSchedule, minimumTradeAmount);
         }
 
-        // TODO: This is not complete...
-        return null;
+        if (residualUnits == 1) {
+            baseUnitSchedule.put(0, 1);
+            return finalizeSchedule(baseUnitSchedule, minimumTradeAmount);
+        }
+
+        // Compute a time step separating the residual units
+        double residualTimeSpacing = getTimeSpacingInBetweenOrders(durationInSeconds, residualUnits, minimumTimeSpacingInSeconds);
+
+        // Make a time schedule for residuals
+        ArrayList<Integer> residualTradingTimes = getTradingTimeSchedule(durationInSeconds, residualTimeSpacing);
+
+        // Increment the base schedule
+        HashMap<Integer, Integer> schedule  = overlayResidualUnitSchedule(baseUnitSchedule, residualTradingTimes, residualUnits);
+
+        if (computeTotalNumberOfUnits(schedule) != totalTradingUnits){
+            throw new Exception();
+        }
+
+        return finalizeSchedule(baseUnitSchedule, minimumTradeAmount);
     }
 
     // ##################################################################
@@ -99,7 +116,7 @@ public class OrderScheduleBuilder {
         ArrayList<Integer> tradingTimes = new ArrayList<>();
 
         // Loop to fill all times
-        while (t < durationInSeconds) {
+        while (t <= durationInSeconds) {
             if (t > durationInSeconds) {
                 break;
             } else {
@@ -118,26 +135,40 @@ public class OrderScheduleBuilder {
         // Basic size for every time step
         int unitsPerTradingTime = totalTradingUnits / numberOfSteps;
 
-        // Output container
-        HashMap<Integer, Integer> unitsSchedule = getUnitSchedule(tradingTimes, totalTradingUnits, unitsPerTradingTime);
-
-        // Current size
-        int totalAllocatedUnits = computeTotalNumberOfUnits(unitsSchedule);
-
-        // We match our target perfectly
-        if (totalAllocatedUnits == totalTradingUnits) {
-            return unitsSchedule;
+        while (numberOfSteps * unitsPerTradingTime > totalTradingUnits){
+            unitsPerTradingTime -= 1;
+            if (unitsPerTradingTime < 0) {
+                throw new IllegalArgumentException();
+            }
         }
 
-        // Compute the excess/missing amount
-        int mismatch = totalAllocatedUnits - totalTradingUnits;
+        // Output result
+        return getUnitSchedule(tradingTimes, totalTradingUnits, unitsPerTradingTime);
+    }
 
-        // Correct the schedule
-        if (mismatch > 0) {
-            return removeExcessUnitsFromSchedule(unitsSchedule, mismatch);
-        } else {
-            return addMissingUnitsToSchedule(unitsSchedule, mismatch);
+    private static HashMap<Integer, Integer> overlayResidualUnitSchedule(HashMap<Integer, Integer> schedule, ArrayList<Integer> residualTradingTimes, int residualUnits) {
+
+        // How many trading times
+        int numberOfSteps = residualTradingTimes.size();
+
+        int totalUnits = 0;
+        int residualUnitsPerStep = Math.max((int) (residualUnits / numberOfSteps), 1);
+
+        for (int t : residualTradingTimes) {
+
+            if (totalUnits + residualUnitsPerStep > residualUnits) {
+                break;
+            }
+
+            int current = 0;
+
+            if (schedule.containsKey(t)) {
+                current = schedule.get(t);
+            }
+            schedule.put(t, current + residualUnitsPerStep);
+            totalUnits += residualUnitsPerStep;
         }
+        return schedule;
     }
 
     private static HashMap<Integer, Integer> removeExcessUnitsFromSchedule(HashMap<Integer, Integer> schedule, int mismatch) {
@@ -146,7 +177,7 @@ public class OrderScheduleBuilder {
             int reduceBy = Math.min(mismatch, schedule.get(t));
             schedule.put(t, current - reduceBy);
             mismatch -= reduceBy;
-            if (mismatch <= 0){
+            if (mismatch <= 0) {
                 break;
             }
         }
@@ -155,7 +186,7 @@ public class OrderScheduleBuilder {
 
     private static HashMap<Integer, Integer> addMissingUnitsToSchedule(HashMap<Integer, Integer> schedule, int mismatch) {
         int current = schedule.get(0);
-        schedule.put(0, current + mismatch);
+        schedule.put(0, current + Math.abs(mismatch));
         return schedule;
     }
 
@@ -185,12 +216,24 @@ public class OrderScheduleBuilder {
         return schedule;
     }
 
-    private static HashMap<Integer, Double> finalizeSchedule(HashMap<Integer, Integer> schedule, double minimumTradeAmount){
+    private static HashMap<Integer, Double> finalizeSchedule(HashMap<Integer, Integer> schedule, double minimumTradeAmount) {
         HashMap<Integer, Double> amountSchedule = new HashMap<>();
-        for(int t : schedule.keySet()){
+        for (int t : schedule.keySet()) {
             amountSchedule.put(t, minimumTradeAmount * schedule.get(t));
         }
         return amountSchedule;
+    }
+
+    public static void main(String[] args) {
+
+        try {
+            var schedule = AtomicOrdersScheduleBuilder.buildSchedule(240.0, 10.0, 60.0, 5.0);
+            System.out.println("Done");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }

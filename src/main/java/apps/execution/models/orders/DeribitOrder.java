@@ -1,11 +1,11 @@
 package apps.execution.models.orders;
 
 import apps.execution.models.atomic.DeribitAtomicOrder;
-import commons.models.instruments.BaseInstrument;
+import apps.execution.models.support.DeribitAtomicOrderSchedule;
 import commons.standards.DerivativeExchange;
-import commons.standards.OrderType;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
+import deribit.models.instruments.DeribitInstrument;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public abstract class DeribitOrder {
     private final Instant creationInstant;
 
     // From constructor
-    private final BaseInstrument instrument;
+    private final DeribitInstrument instrument;
     private final double amount;
     private final QuoteDirection direction;
     private final TimeInForce timeInForce;
@@ -31,7 +31,7 @@ public abstract class DeribitOrder {
     // CONSTRUCTORS
     // ##################################################################
 
-    public DeribitOrder(BaseInstrument instrument, double amount, QuoteDirection direction, TimeInForce timeInForce, String label) {
+    public DeribitOrder(DeribitInstrument instrument, double amount, QuoteDirection direction, TimeInForce timeInForce, String label) {
 
         // Creation instant of this object
         this.creationInstant = Instant.now();
@@ -48,7 +48,38 @@ public abstract class DeribitOrder {
     // ABSTRACT METHODS
     // ##################################################################
 
-    public abstract HashMap<Integer, DeribitAtomicOrder> getExecutionSchedule();
+    public abstract DeribitAtomicOrderSchedule getExecutionSchedule();
 
+    // ##################################################################
+    // GETTERS
+    // ##################################################################
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public QuoteDirection getDirection() {
+        return direction;
+    }
+
+    public TimeInForce getTimeInForce() {
+        return timeInForce;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public Instant getCreationInstant() {
+        return creationInstant;
+    }
+
+    public DerivativeExchange getExchange() {
+        return exchange;
+    }
+
+    public DeribitInstrument getInstrument() {
+        return instrument;
+    }
 }
 

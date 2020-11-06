@@ -1,10 +1,10 @@
 package apps.execution.models.orders;
 
 import apps.execution.models.atomic.DeribitAtomicMarketOrder;
-import apps.execution.models.atomic.DeribitAtomicOrder;
-import commons.models.instruments.BaseInstrument;
+import apps.execution.models.support.DeribitAtomicOrderSchedule;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
+import deribit.models.instruments.DeribitInstrument;
 
 import java.util.HashMap;
 
@@ -20,7 +20,7 @@ public class DeribitMarketOrder extends DeribitOrder {
     // CONSTRUCTOR
     // ##################################################################
 
-    public DeribitMarketOrder(BaseInstrument instrument, double amount, QuoteDirection direction, TimeInForce timeInForce, String label) {
+    public DeribitMarketOrder(DeribitInstrument instrument, double amount, QuoteDirection direction, TimeInForce timeInForce, String label) {
         super(instrument, amount, direction, timeInForce, label);
         this.order = new DeribitAtomicMarketOrder(instrument, amount, direction, timeInForce, label);
     }
@@ -30,9 +30,9 @@ public class DeribitMarketOrder extends DeribitOrder {
     // ##################################################################
 
     @Override
-    public HashMap<Integer, DeribitAtomicOrder> getExecutionSchedule() {
-        HashMap<Integer, DeribitAtomicOrder> result = new HashMap<>();
-        result.put(0, order);
+    public DeribitAtomicOrderSchedule getExecutionSchedule() {
+        DeribitAtomicOrderSchedule result = new DeribitAtomicOrderSchedule();
+        result.add(0, order);
         return result;
     }
 }
