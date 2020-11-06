@@ -1,6 +1,6 @@
 package commons.models.quotes;
 
-import commons.models.exchange.DerivativeExchange;
+import commons.standards.DerivativeExchange;
 import commons.models.instruments.BaseInstrument;
 
 public interface Quote {

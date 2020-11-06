@@ -1,4 +1,4 @@
-package commons.models.exchange;
+package commons.standards;
 
 public enum DerivativeExchange {
 
@@ -6,7 +6,8 @@ public enum DerivativeExchange {
     OKEX(1),
     HUOBI(2),
     QUEDEX(3),
-    LEDGER_X(4);
+    LEDGER_X(4),
+    BIT_DOT_COM(5);
 
     private final int endpoint;
 

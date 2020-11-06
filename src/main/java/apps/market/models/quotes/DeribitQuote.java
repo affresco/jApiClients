@@ -2,7 +2,7 @@ package apps.market.models.quotes;
 
 import commons.standards.Cryptocurrency;
 import deribit.models.instruments.DeribitInstrument;
-import commons.models.exchange.DerivativeExchange;
+import commons.standards.DerivativeExchange;
 import commons.models.quotes.Quote;
 
 public class DeribitQuote implements Quote {
