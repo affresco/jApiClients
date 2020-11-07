@@ -19,13 +19,15 @@ class ExecutionService {
 
     // Execution schedule: keyed by time of execution,
     // values are list of atomic orders waiting for execution at that time
-    private HashMap<Instant, ArrayList<AtomicOrder>> executionSchedule;
+    private final HashMap<Instant, ArrayList<AtomicOrder>> executionSchedule;
 
     // ##################################################################
     // CONSTRUCTOR
     // ##################################################################
 
-    ExecutionService(){}
+    ExecutionService(){
+        this.executionSchedule = new HashMap<>();
+    }
 
     // ##################################################################
     // METHODS MODIFYING THE STATE OF THIS OBJECT
