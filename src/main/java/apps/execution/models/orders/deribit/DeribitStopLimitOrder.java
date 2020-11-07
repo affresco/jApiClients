@@ -1,15 +1,11 @@
-package apps.execution.models.orders;
+package apps.execution.models.orders.deribit;
 
-import apps.execution.models.atomic.DeribitAtomicLimitOrder;
-import apps.execution.models.atomic.DeribitAtomicOrder;
-import apps.execution.models.atomic.DeribitAtomicStopLimitOrder;
+import apps.execution.models.atomic.deribit.DeribitAtomicStopLimitOrder;
+import apps.execution.models.support.AtomicOrderSchedule;
 import apps.execution.models.support.DeribitAtomicOrderSchedule;
-import commons.models.instruments.BaseInstrument;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
 import deribit.models.instruments.DeribitInstrument;
-
-import java.util.HashMap;
 
 public class DeribitStopLimitOrder extends DeribitOrder {
 
@@ -33,7 +29,7 @@ public class DeribitStopLimitOrder extends DeribitOrder {
     // ##################################################################
 
     @Override
-    public DeribitAtomicOrderSchedule getExecutionSchedule() {
+    public AtomicOrderSchedule getExecutionSchedule() {
         DeribitAtomicOrderSchedule result = new DeribitAtomicOrderSchedule();
         result.add(0, order);
         return result;

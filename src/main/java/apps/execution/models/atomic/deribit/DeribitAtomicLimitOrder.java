@@ -1,4 +1,4 @@
-package apps.execution.models.atomic;
+package apps.execution.models.atomic.deribit;
 
 import commons.models.instruments.BaseInstrument;
 import commons.standards.OrderType;

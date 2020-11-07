@@ -1,7 +1,7 @@
-package apps.execution.models.orders;
+package apps.execution.models.orders.deribit;
 
-import apps.execution.models.atomic.DeribitAtomicMarketOrder;
-import apps.execution.models.atomic.DeribitAtomicOrder;
+import apps.execution.models.atomic.deribit.DeribitAtomicMarketOrder;
+import apps.execution.models.support.AtomicOrderSchedule;
 import apps.execution.models.support.AtomicOrdersScheduleBuilder;
 import apps.execution.models.support.DeribitAtomicOrderSchedule;
 import commons.standards.QuoteDirection;
@@ -41,7 +41,7 @@ public class DeribitSpreadMarketOrder extends DeribitOrder {
     // ##################################################################
 
     @Override
-    public DeribitAtomicOrderSchedule getExecutionSchedule() {
+    public AtomicOrderSchedule getExecutionSchedule() {
         if(executionSchedule == null){
             try {
                 setExecutionSchedule();

@@ -1,11 +1,9 @@
-package apps.execution.models.atomic;
+package apps.execution.models.atomic.deribit;
 
 import commons.models.instruments.BaseInstrument;
 import commons.standards.OrderType;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
-
-import utilities.Identity;
 
 public class DeribitAtomicMarketOrder extends DeribitAtomicOrder{
 

@@ -1,23 +1,24 @@
 package apps.execution.models.support;
 
-import apps.execution.models.atomic.DeribitAtomicOrder;
+import apps.execution.models.atomic.AtomicOrder;
+import apps.execution.models.atomic.deribit.DeribitAtomicOrder;
 
 import java.util.HashMap;
 
-public class DeribitAtomicOrderSchedule {
+public class DeribitAtomicOrderSchedule implements AtomicOrderSchedule {
 
     // ##################################################################
     // ATTRIBUTES
     // ##################################################################
 
-    private final HashMap<Integer, DeribitAtomicOrder> executionSchedule;
+    private final HashMap<Integer, DeribitAtomicOrder> schedule;
 
     // ##################################################################
     // CONSTRUCTOR
     // ##################################################################
 
     public DeribitAtomicOrderSchedule() {
-        executionSchedule = new HashMap<>();
+        schedule = new HashMap<>();
     }
 
     // ##################################################################
@@ -26,11 +27,18 @@ public class DeribitAtomicOrderSchedule {
 
     public void add(int delayInMilliseconds, DeribitAtomicOrder order){
 
-        if(executionSchedule.containsKey(delayInMilliseconds)){
+        if(schedule.containsKey(delayInMilliseconds)){
             throw new IllegalArgumentException();
         }
 
-        executionSchedule.put(delayInMilliseconds, order);
+        schedule.put(delayInMilliseconds, order);
     }
 
+    public HashMap<Integer, AtomicOrder> getSchedule() {
+        HashMap<Integer, AtomicOrder> output = new HashMap<>();
+        for(int t: schedule.keySet()){
+            output.put(t, schedule.get(t));
+        }
+        return output;
+    }
 }

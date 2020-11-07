@@ -1,12 +1,11 @@
-package apps.execution.models.orders;
+package apps.execution.models.orders.deribit;
 
-import apps.execution.models.atomic.DeribitAtomicMarketOrder;
+import apps.execution.models.atomic.deribit.DeribitAtomicMarketOrder;
+import apps.execution.models.support.AtomicOrderSchedule;
 import apps.execution.models.support.DeribitAtomicOrderSchedule;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
 import deribit.models.instruments.DeribitInstrument;
-
-import java.util.HashMap;
 
 public class DeribitMarketOrder extends DeribitOrder {
 
@@ -30,9 +29,14 @@ public class DeribitMarketOrder extends DeribitOrder {
     // ##################################################################
 
     @Override
-    public DeribitAtomicOrderSchedule getExecutionSchedule() {
+    public AtomicOrderSchedule getExecutionSchedule() {
         DeribitAtomicOrderSchedule result = new DeribitAtomicOrderSchedule();
         result.add(0, order);
         return result;
     }
+
+
+
+
+
 }

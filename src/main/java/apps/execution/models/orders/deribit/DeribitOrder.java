@@ -1,14 +1,15 @@
-package apps.execution.models.atomic;
+package apps.execution.models.orders.deribit;
 
+import apps.execution.models.orders.Order;
+import apps.execution.models.support.AtomicOrderSchedule;
 import commons.standards.DerivativeExchange;
-import commons.models.instruments.BaseInstrument;
-import commons.standards.OrderType;
 import commons.standards.QuoteDirection;
 import commons.standards.TimeInForce;
+import deribit.models.instruments.DeribitInstrument;
 
 import java.time.Instant;
 
-public class DeribitAtomicOrder {
+public abstract class DeribitOrder implements Order {
 
     // ##################################################################
     // ATTRIBUTES
@@ -19,19 +20,17 @@ public class DeribitAtomicOrder {
     private final Instant creationInstant;
 
     // From constructor
-    private final BaseInstrument instrument;
+    private final DeribitInstrument instrument;
     private final double amount;
     private final QuoteDirection direction;
-    private final OrderType orderType;
     private final TimeInForce timeInForce;
     private final String label;
-
 
     // ##################################################################
     // CONSTRUCTORS
     // ##################################################################
 
-    public DeribitAtomicOrder(BaseInstrument instrument, double amount, QuoteDirection direction, OrderType orderType, TimeInForce timeInForce, String label){
+    public DeribitOrder(DeribitInstrument instrument, double amount, QuoteDirection direction, TimeInForce timeInForce, String label) {
 
         // Creation instant of this object
         this.creationInstant = Instant.now();
@@ -40,62 +39,47 @@ public class DeribitAtomicOrder {
         this.instrument = instrument;
         this.amount = amount;
         this.direction = direction;
-        this.orderType = orderType;
         this.timeInForce = timeInForce;
         this.label = label;
+
     }
+
+    // ##################################################################
+    // ABSTRACT METHODS
+    // ##################################################################
+
+    public abstract AtomicOrderSchedule getExecutionSchedule();
 
     // ##################################################################
     // GETTERS
     // ##################################################################
 
-    public BaseInstrument getInstrument() {
-        return instrument;
-    }
-
     public double getAmount() {
         return amount;
-    }
-
-    public Instant getCreationInstant() {
-        return creationInstant;
-    }
-
-    public OrderType getOrderType() {
-        return orderType;
     }
 
     public QuoteDirection getDirection() {
         return direction;
     }
 
+    public TimeInForce getTimeInForce() {
+        return timeInForce;
+    }
+
     public String getLabel() {
         return label;
     }
 
-    public TimeInForce getTimeInForce() {
-        return timeInForce;
+    public Instant getCreationInstant() {
+        return creationInstant;
     }
 
     public DerivativeExchange getExchange() {
         return exchange;
     }
 
-    // ##################################################################
-    // DISPLAY
-    // ##################################################################
-
-    @Override
-    public String toString() {
-        return "AtomicOrder{" +
-                "instrument=" + instrument +
-                ", amount=" + amount +
-                ", direction=" + direction +
-                ", orderType=" + orderType +
-                ", label='" + label + '\'' +
-                '}';
+    public DeribitInstrument getInstrument() {
+        return instrument;
     }
-
-
-
 }
+
