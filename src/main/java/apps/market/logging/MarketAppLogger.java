@@ -13,7 +13,7 @@ public class MarketAppLogger {
     protected static Logger getLogger() {
         if(logger == null){
             logger = LoggerFactory.getLogger(MarketAppLogger.class);
-            BasicConfigurator.configure();
+            //BasicConfigurator.configure();
         }
         return logger;
     }

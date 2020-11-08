@@ -1,17 +1,20 @@
 package deribit.client.factories;
 
 import clients.models.messages.Message;
+import commons.standards.InstrumentKind;
 import deribit.client.endpoints.SubscriptionEndpoints;
 import org.json.JSONObject;
 import utilities.Identity;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import deribit.client.models.SubscriptionMessage;
 
 public class SubscriptionMessageFactory extends MessageFactory {
 
     // ##################################################################
-    // QUOTES
+    // QUOTES (PUBLIC)
     // ##################################################################
 
     public static SubscriptionMessage subscribeQuotes(String instrument) {
@@ -27,11 +30,31 @@ public class SubscriptionMessageFactory extends MessageFactory {
     }
 
     public static String toQuoteChannel(String instrument) {
-        return "quote." + instrument.toUpperCase() ;
+        return "quote." + instrument;
     }
 
     // ##################################################################
-    // ORDER BOOKS
+    // TRADES (PUBLIC)
+    // ##################################################################
+
+    public static SubscriptionMessage subscribeTrades(String instrument) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toTradeChannel(instrument));
+        return publicSubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeTrades(String instrument) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toTradeChannel(instrument));
+        return publicUnsubscribe(channels);
+    }
+
+    public static String toTradeChannel(String instrument) {
+        return "trades." + instrument ;
+    }
+
+    // ##################################################################
+    // ORDER BOOKS (PUBLIC)
     // ##################################################################
 
     public static SubscriptionMessage subscribeBooks(String instrument) {
@@ -47,11 +70,13 @@ public class SubscriptionMessageFactory extends MessageFactory {
     }
 
     public static String toBooksChannel(String instrument) {
-        return "book." + instrument.toLowerCase()  + "10.100ms";
+        // TODO; Check if this works with none...
+        // return "book." + instrument + "10.100ms";
+        return "book." + instrument + "none.100ms";
     }
 
     // ##################################################################
-    // HOME MADE INDEX
+    // DERIBIT INDEX (PUBLIC)
     // ##################################################################
 
     public static SubscriptionMessage subscribeIndex(String currency) {
@@ -71,6 +96,164 @@ public class SubscriptionMessageFactory extends MessageFactory {
     }
 
     // ##################################################################
+    // PLATFORM STATE (PUBLIC)
+    // ##################################################################
+
+    public static SubscriptionMessage subscribePlatformState() {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toPlatformStateChannel());
+        return publicSubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribePlatformState() {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toPlatformStateChannel());
+        return publicUnsubscribe(channels);
+    }
+
+    public static String toPlatformStateChannel() {
+        return "platform_state";
+    }
+
+    // ##################################################################
+    // USER ORDERS (PRIVATE)
+    // ##################################################################
+
+    public static SubscriptionMessage subscribeUserOrders() {
+        ArrayList<String> channels = new ArrayList<>(List.of(toUserOrdersChannel()));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage subscribeUserOrders(String instrument) {
+        ArrayList<String> channels = new ArrayList<>(List.of(toUserOrdersChannel(instrument)));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage subscribeUserOrders(String kind, String currency) {
+        ArrayList<String> channels = new ArrayList<>(List.of(toUserOrdersChannel(kind, currency)));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeUserOrders() {
+        ArrayList<String> channels = new ArrayList<>(List.of(toUserOrdersChannel()));
+        return privateUnsubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeUserOrders(String instrument) {
+        ArrayList<String> channels = new ArrayList<>(List.of(toUserOrdersChannel(instrument)));
+        return privateUnsubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeUserOrders(String kind, String currency) {
+        ArrayList<String> channels = new ArrayList<>(List.of(toUserOrdersChannel(kind, currency)));
+        return privateUnsubscribe(channels);
+    }
+
+    public static String toUserOrdersChannel(String instrument) {
+        return "user.orders." + instrument + ".raw";
+    }
+
+    public static String toUserOrdersChannel(String kind, String currency) {
+        return "user.orders." + kind + "." + currency + ".raw";
+    }
+
+    public static String toUserOrdersChannel() {
+        return "user.orders.any.any.raw";
+    }
+    
+    // ##################################################################
+    // USER TRADES (PRIVATE)
+    // ##################################################################
+
+    public static SubscriptionMessage subscribeUserTrades() {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toUserTradesChannel());
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage subscribeUserTrades(String instrument) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toUserTradesChannel(instrument));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage subscribeUserTrades(String kind, String currency) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toUserTradesChannel(kind, currency));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeUserTrades() {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toUserTradesChannel());
+        return privateUnsubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeUserTrades(String instrument) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toUserTradesChannel(instrument));
+        return privateUnsubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeUserTrades(String kind, String currency) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toUserTradesChannel(kind, currency));
+        return privateUnsubscribe(channels);
+    }
+
+    public static String toUserTradesChannel(String instrument) {
+        return "user.trades." + instrument + ".raw";
+    }
+
+    public static String toUserTradesChannel(String kind, String currency) {
+        return "user.trades." + kind + "." + currency + ".raw";
+    }
+
+    public static String toUserTradesChannel() {
+        return "user.trades.any.any.raw";
+    }
+
+    // ##################################################################
+    // USER PORTFOLIO (PRIVATE)
+    // ##################################################################
+
+    public static SubscriptionMessage subscribePortfolio(String currency) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toIndexChannel(currency));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribePortfolio(String currency) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toIndexChannel(currency));
+        return privateUnsubscribe(channels);
+    }
+
+    public static String toPortfolioChannel(String currency) {
+        return "user.portfolio." + currency;
+    }
+
+    // ##################################################################
+    // MMP TRIGGER (PRIVATE)
+    // ##################################################################
+
+    public static SubscriptionMessage subscribeMmpTrigger(String currency) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toIndexChannel(currency));
+        return privateSubscribe(channels);
+    }
+
+    public static SubscriptionMessage unsubscribeMmpTrigger(String currency) {
+        ArrayList<String> channels = new ArrayList<>();
+        channels.add(toIndexChannel(currency));
+        return privateUnsubscribe(channels);
+    }
+
+    public static String toMmpTriggerChannel(String currency) {
+        return "user.mmp_trigger." + currency;
+    }
+
+    // ##################################################################
     // COMMONS
     // ##################################################################
 
@@ -83,6 +266,20 @@ public class SubscriptionMessageFactory extends MessageFactory {
 
     private static SubscriptionMessage publicUnsubscribe(ArrayList<String> channels) {
         String method = SubscriptionEndpoints.PUBLIC_UNSUBSCRIBE.getEndpoint();
+        JSONObject params = new JSONObject();
+        params.put("channels", channels);
+        return buildMessage(method, params, channels);
+    }
+
+    private static SubscriptionMessage privateSubscribe(ArrayList<String> channels) {
+        String method = SubscriptionEndpoints.PRIVATE_SUBSCRIBE.getEndpoint();
+        JSONObject params = new JSONObject();
+        params.put("channels", channels);
+        return buildMessage(method, params, channels);
+    }
+
+    private static SubscriptionMessage privateUnsubscribe(ArrayList<String> channels) {
+        String method = SubscriptionEndpoints.PRIVATE_UNSUBSCRIBE.getEndpoint();
         JSONObject params = new JSONObject();
         params.put("channels", channels);
         return buildMessage(method, params, channels);

@@ -1,5 +1,6 @@
 package apps.market.feeds;
 
+import apps.market.Settings;
 import apps.market.events.DeribitIndexEvent;
 import apps.market.events.DeribitQuoteEvent;
 import apps.market.logging.MarketAppLogger;
@@ -7,11 +8,15 @@ import apps.market.models.quotes.DeribitQuote;
 import apps.market.models.quotes.DeribitQuoteFactory;
 import clients.models.messages.Message;
 import commons.standards.Cryptocurrency;
+import commons.standards.InstrumentKind;
 import deribit.client.DeribitCredentials;
 import deribit.client.core.DeribitWebsocketClient;
 import deribit.client.factories.SubscriptionMessageFactory;
 import deribit.client.models.SubscriptionMessage;
+import org.apache.log4j.BasicConfigurator;
 import org.greenrobot.eventbus.EventBus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -29,6 +34,9 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
     private final HashMap<String, SubscriptionMessage> channelsBeingAdded;
     private final HashMap<String, SubscriptionMessage> channelsBeingRemoved;
 
+    // Logging via SLF4J
+    private static Logger logger;
+
     // ##################################################################
     // CONSTRUCTORS
     // ##################################################################
@@ -38,6 +46,9 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
         // Invoke super class constructor first
         super(url, credentials, clientId);
 
+        // Setup logging
+        logger = getLogger();
+
         // Init all channel structures
         this.channels = new HashMap<>();
         this.channelsBeingAdded = new HashMap<>();
@@ -46,6 +57,18 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
         // Connect and block while doing it
         this.connectBlocking(2000, TimeUnit.SECONDS);
 
+    }
+
+    // ##################################################################
+    // LOGGING
+    // ##################################################################
+
+    protected static Logger getLogger() {
+        if(logger == null){
+            logger = LoggerFactory.getLogger(Settings.SYMBOL.toString());
+            BasicConfigurator.configure();
+        }
+        return logger;
     }
 
     // ##################################################################
@@ -112,10 +135,16 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
     }
 
     public void broadcastBook(String message) {
+        System.out.println("Book:" + message);
     }
 
+
+    // ##################################################################
+    // SYSTEM/CONNECTION EVENTS
+    // ##################################################################
+
     public void parseSystemMessage(String message) {
-        System.out.println(message);
+        System.out.println("System Message:" + message);
     }
 
     // ##################################################################
@@ -127,6 +156,21 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
         // Convert to corresponding message
         SubscriptionMessage msg = SubscriptionMessageFactory.subscribeQuotes(instrument);
 
+        // Log
+        logger.warn("Subscribing Deribit quotes data for instrument: " + instrument.toString());
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeTrades(String instrument) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeQuotes(instrument);
+
+        // Log
+        logger.warn("Subscribing Deribit trades data for instrument: " + instrument.toString());
+
         // Un-/Subscribe all pending channels
         subscribe(msg);
     }
@@ -135,6 +179,9 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
 
         // Convert to corresponding message
         SubscriptionMessage msg = SubscriptionMessageFactory.subscribeIndex(currency.toString());
+
+        // Log
+        logger.warn("Subscribing Deribit index data for currency: " + currency.toString());
 
         // Un-/Subscribe all pending channels
         subscribe(msg);
@@ -149,6 +196,78 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
         subscribe(msg);
     }
 
+    public void subscribePlatformState() {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribePlatformState();
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserOrders() {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeUserOrders();
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserOrders(String instrument) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeUserOrders(instrument);
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserOrders(InstrumentKind kind, Cryptocurrency currency) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeUserOrders(kind.toString(), currency.toString());
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserTrades() {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeUserTrades();
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserTrades(String instrument) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeUserTrades(instrument);
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserTrades(InstrumentKind kind, Cryptocurrency currency) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeUserTrades(kind.toString(), currency.toString());
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
+    public void subscribeUserPortfolio(Cryptocurrency currency) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.subscribePortfolio(currency.toString());
+
+        // Un-/Subscribe all pending channels
+        subscribe(msg);
+    }
+
     // ##################################################################
     // INTERFACE -- UN-SUBSCRIPTION
     // ##################################################################
@@ -156,7 +275,7 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
     public void unsubscribeQuotes(String instrument) {
 
         // Convert to corresponding message
-        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeQuotes(instrument);
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeQuotes(instrument);
 
         // Un-/Subscribe all pending channels
         unsubscribe(msg);
@@ -165,7 +284,7 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
     public void unsubscribeIndex(Cryptocurrency currency) {
 
         // Convert to corresponding message
-        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeIndex(currency.toString());
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeIndex(currency.toString());
 
         // Un-/Subscribe all pending channels
         unsubscribe(msg);
@@ -174,14 +293,86 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
     public void unsubscribeBook(String instrument) {
 
         // Convert to corresponding message
-        SubscriptionMessage msg = SubscriptionMessageFactory.subscribeBooks(instrument);
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeBooks(instrument);
 
         // Un-/Subscribe all pending channels
         unsubscribe(msg);
     }
 
+    public void unsubscribePlatformState() {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribePlatformState();
+
+        // Un-/Subscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserOrders() {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeUserOrders();
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserOrders(String instrument) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeUserOrders(instrument);
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserOrders(InstrumentKind kind, Cryptocurrency currency) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeUserOrders(kind.toString(), currency.toString());
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserTrades() {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeUserTrades();
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserTrades(String instrument) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeUserTrades(instrument);
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserTrades(InstrumentKind kind, Cryptocurrency currency) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribeUserTrades(kind.toString(), currency.toString());
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
+    public void unsubscribeUserPortfolio(Cryptocurrency currency) {
+
+        // Convert to corresponding message
+        SubscriptionMessage msg = SubscriptionMessageFactory.unsubscribePortfolio(currency.toString());
+
+        // Un-/unsubscribe all pending channels
+        unsubscribe(msg);
+    }
+
     // ##################################################################
-    // CORE: RECORD KEEPING
+    // CORE: KEEPING RECORDS UP-TO-DATE
     // ##################################################################
 
     private void addChannels(ArrayList<String> channels, SubscriptionMessage message) {
@@ -277,8 +468,8 @@ public class DeribitDataFeed extends DeribitWebsocketClient {
         DeribitDataFeed client = new DeribitDataFeed(url, credentials, clientId);
 
         System.out.println("Subscription client isOpen " + client.isOpen());
-        //client.subscribeQuotes("BTC-PERPETUAL");
-        client.subscribeIndex(Cryptocurrency.BTC);
+        client.subscribeQuotes("BTC-PERPETUAL");
+        // client.subscribeIndex(Cryptocurrency.BTC);
         int j = 0;
         while (j < 600) {
             j++;
