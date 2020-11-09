@@ -1,4 +1,4 @@
-package commons.models.market;
+package commons.models.contract;
 
 public abstract class BaseContractStructure {
 

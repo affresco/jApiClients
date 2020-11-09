@@ -3,8 +3,12 @@ package commons.models.expiries;
 import commons.standards.SettlementPeriod;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
-public abstract class BaseExpiry {
+public abstract class BaseExpiry implements Expiry {
 
     private final Instant expiryDate;
     private final SettlementPeriod settlementPeriod;
@@ -15,7 +19,7 @@ public abstract class BaseExpiry {
     }
 
     public BaseExpiry(BaseExpiry expiry){
-        this.expiryDate = expiry.getExpiryDate();
+        this.expiryDate = expiry.getExpiry();
         this.settlementPeriod = expiry.getSettlementPeriod();
     }
 
@@ -39,8 +43,15 @@ public abstract class BaseExpiry {
         protected abstract T self();
     }
 
-    public Instant getExpiryDate() {
+    public Instant getExpiry() {
         return Instant.from(expiryDate);
+    }
+
+    public String getExpiryDateAsString() {
+        DateTimeFormatter formatter = DateTimeFormatter
+                        .ofLocalizedDateTime( FormatStyle.SHORT )
+                        .withZone(ZoneId.from(ZoneOffset.UTC) );
+        return formatter.format( expiryDate );
     }
 
     public SettlementPeriod getSettlementPeriod() {

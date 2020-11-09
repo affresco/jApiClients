@@ -1,6 +1,6 @@
 package deribit.models.contract;
 
-import commons.models.market.BaseContractStructure;
+import commons.models.contract.BaseContractStructure;
 
 public class DeribitContractStructure extends BaseContractStructure {
 

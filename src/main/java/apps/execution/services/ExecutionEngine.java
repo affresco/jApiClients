@@ -4,8 +4,12 @@ package apps.execution.services;
 import apps.execution.events.ExecutionRequestEvent;
 import apps.execution.events.HaltExecutionRequestEvent;
 import apps.execution.events.ResumeExecutionRequestEvent;
+import apps.market.Settings;
+import org.apache.log4j.BasicConfigurator;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExecutionEngine {
 
@@ -20,6 +24,9 @@ public class ExecutionEngine {
     // Services
     private final ExecutionService executionService;
     private final MonitoringService monitoringService;
+
+    // Logging via SLF4J
+    private static Logger logger;
 
     // ##################################################################
     // CONSTRUCTOR
@@ -80,6 +87,18 @@ public class ExecutionEngine {
 
     public boolean isReady() {
         return isReady;
+    }
+
+    // ##################################################################
+    // LOGGING
+    // ##################################################################
+
+    protected static Logger getLogger() {
+        if (logger == null) {
+            logger = LoggerFactory.getLogger(Settings.SYMBOL.toString());
+            BasicConfigurator.configure();
+        }
+        return logger;
     }
 
 

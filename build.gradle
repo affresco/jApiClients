@@ -20,6 +20,10 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-annotations:2.11.3"
     compile "com.fasterxml.jackson.core:jackson-databind:2.11.3"
 
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
+    compile group: 'org.apache.commons', name: 'commons-math3', version: '3.0'
+
+
     def eventbus_version = '3.2.0'
     implementation "org.greenrobot:eventbus:$eventbus_version"
 }

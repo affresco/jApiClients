@@ -63,27 +63,27 @@ public class DeribitQuote implements Quote {
     }
 
     @Override
-    public double getBidPrice() {
+    public Double getBidPrice() {
         return bidPrice;
     }
 
     @Override
-    public double getAskPrice() {
+    public Double getAskPrice() {
         return askPrice;
     }
 
     @Override
-    public double getBidQuantity() {
+    public Double getBidQuantity() {
         return bidQuantity;
     }
 
     @Override
-    public double getAskQuantity() {
+    public Double getAskQuantity() {
         return askQuantity;
     }
 
     @Override
-    public double getTimestamp() {
+    public Double getTimestamp() {
         return timestamp;
     }
 
