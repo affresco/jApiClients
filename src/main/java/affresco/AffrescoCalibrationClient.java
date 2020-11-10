@@ -1,12 +1,15 @@
 package affresco;
 
 import clients.http.BaseHttpResponse;
+import commons.models.expiries.Expiry;
 import commons.standards.Cryptocurrency;
+import deribit.models.expiries.DeribitExpiryFactory;
 
+import java.text.ParseException;
 import java.util.List;
 
 
-public class CalibrationAffrescoClient extends AffrescoClient {
+public class AffrescoCalibrationClient extends AffrescoClient {
 
     // ##################################################################
     // ATTRIBUTES
@@ -20,11 +23,11 @@ public class CalibrationAffrescoClient extends AffrescoClient {
     // CONSTRUCTORS
     // ##################################################################
 
-    public CalibrationAffrescoClient(String serverAddress, int serverPort) {
+    public AffrescoCalibrationClient(String serverAddress, int serverPort) {
         super(buildAddressPrefix(serverAddress, serverPort), VERSION, TIMEOUT);
     }
 
-    public CalibrationAffrescoClient(String serverAddress) {
+    public AffrescoCalibrationClient(String serverAddress) {
         super(buildAddressPrefix(serverAddress), VERSION, TIMEOUT);
     }
 
@@ -34,20 +37,19 @@ public class CalibrationAffrescoClient extends AffrescoClient {
 
     private static String buildAddressPrefix(String server, int port) {
         String part1 = String.join(":", List.of(server, Integer.toString(port)));
-        return String.join("/", List.of(part1, CalibrationAffrescoClient.NAME, "v" + Integer.toString(VERSION)));
+        return String.join("/", List.of(part1, AffrescoCalibrationClient.NAME, "v" + VERSION));
     }
 
     private static String buildAddressPrefix(String server) {
-        return String.join("/", List.of(server, CalibrationAffrescoClient.NAME, "v" + Integer.toString(VERSION)));
+        return String.join("/", List.of(server, AffrescoCalibrationClient.NAME, "v" + VERSION));
     }
 
     // ##################################################################
     // METHODS
     // ##################################################################
 
-    public BaseHttpResponse getDeribitSmile(Cryptocurrency currency, String expiry) {
-        // TODO: This should be an object implementing the Expiry Interface
-        String endpoint = String.join("/", List.of("smile/delta", currency.toString(), expiry));
+    public BaseHttpResponse getDeribitSmile(Cryptocurrency currency, Expiry expiry) {
+        String endpoint = String.join("/", List.of("smile/delta", currency.toString(), expiry.toString()));
         return get(endpoint);
     }
 
@@ -55,11 +57,13 @@ public class CalibrationAffrescoClient extends AffrescoClient {
     // MAIN
     // ##################################################################
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         String address = "api.affresco.io";
-        CalibrationAffrescoClient c = new CalibrationAffrescoClient(address);
-        var res = c.getDeribitSmile(Cryptocurrency.BTC, "25DEC20");
+        AffrescoCalibrationClient c = new AffrescoCalibrationClient(address);
+        var e = DeribitExpiryFactory.getInstanceFromDateString("25DEC20");
+        var res = c.getDeribitSmile(Cryptocurrency.BTC, e);
         System.out.println(res.getBody());
     }
+
 
 }

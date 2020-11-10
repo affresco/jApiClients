@@ -9,7 +9,7 @@ public class VolatilitySmileCalibrationRequestEvent {
 
     private final DerivativeExchange exchange;
     private final Cryptocurrency currency;
-    private final BaseExpiry expiry;
+    private final Expiry expiry;
 
     public VolatilitySmileCalibrationRequestEvent(DerivativeExchange exchange, Cryptocurrency currency, BaseExpiry expiry) {
         this.exchange = exchange;

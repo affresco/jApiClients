@@ -15,7 +15,7 @@ public enum DerivativeExchange {
         this.endpoint = endpoint;
     }
 
-    public int getEndpoint() {
+    public int getIntegerRepresentation() {
         return endpoint;
     }
 }

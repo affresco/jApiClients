@@ -9,8 +9,17 @@ import java.time.Instant;
 
 public class DeribitExpiryFactory {
 
+    // ##################################################################
+    // CONSTRUCTORS
+    // ##################################################################
+
+    // Static all the way
     private DeribitExpiryFactory() {
     }
+
+    // ##################################################################
+    // INTERFACE
+    // ##################################################################
 
     public static DeribitExpiry getInstanceFromSymbol(String symbol) throws ParseException {
 
@@ -18,11 +27,18 @@ public class DeribitExpiryFactory {
 
         if (kind == InstrumentKind.PERPETUAL) {
             return getPerpetual();
-        }
-        else{
+        } else {
             return getTermedExpiry(symbol);
         }
     }
+
+    public static DeribitExpiry getInstanceFromDateString(String date) throws ParseException {
+        return getTermedExpiry(date);
+    }
+
+    // ##################################################################
+    // INTERNAL IMPLEMENTATION
+    // ##################################################################
 
     private static DeribitExpiry getPerpetual() {
 
