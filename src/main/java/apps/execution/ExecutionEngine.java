@@ -1,9 +1,11 @@
-package apps.execution.services;
+package apps.execution;
 
 
 import apps.execution.events.ExecutionRequestEvent;
 import apps.execution.events.HaltExecutionRequestEvent;
 import apps.execution.events.ResumeExecutionRequestEvent;
+import apps.execution.services.ExecutionService;
+import apps.execution.services.MonitoringService;
 import apps.market.Settings;
 import org.apache.log4j.BasicConfigurator;
 import org.greenrobot.eventbus.EventBus;
@@ -46,6 +48,10 @@ public class ExecutionEngine {
 
         // Subscribe to events
         EventBus.getDefault().register(this);
+
+        // Setup our logger
+        setLogger();
+
     }
 
     // ##################################################################
@@ -93,12 +99,11 @@ public class ExecutionEngine {
     // LOGGING
     // ##################################################################
 
-    protected static Logger getLogger() {
+    protected static void setLogger() {
         if (logger == null) {
             logger = LoggerFactory.getLogger(Settings.SYMBOL.toString());
             BasicConfigurator.configure();
         }
-        return logger;
     }
 
 

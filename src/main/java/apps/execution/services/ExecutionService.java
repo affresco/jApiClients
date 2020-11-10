@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class ExecutionService {
+public class ExecutionService {
 
     // ##################################################################
     // ATTRIBUTES
@@ -25,7 +25,7 @@ class ExecutionService {
     // CONSTRUCTOR
     // ##################################################################
 
-    ExecutionService(){
+    public ExecutionService(){
         this.executionSchedule = new HashMap<>();
     }
 
@@ -33,13 +33,13 @@ class ExecutionService {
     // METHODS MODIFYING THE STATE OF THIS OBJECT
     // ##################################################################
 
-    void halt(){
+    public void halt(){
         synchronized (ExecutionService.class) {
             this.isHalted = true;
         }
     }
 
-    void resume(){
+    public void resume(){
         synchronized (ExecutionService.class) {
             this.isHalted = false;
         }
@@ -49,7 +49,7 @@ class ExecutionService {
     // METHODS
     // ##################################################################
 
-    void scheduleExecution(Order order){
+    public void scheduleExecution(Order order){
         AtomicOrderSchedule schedule = order.getExecutionSchedule();
         var orderSchedule = schedule.getSchedule();
         for(int delayInMilliseconds : orderSchedule.keySet()){
